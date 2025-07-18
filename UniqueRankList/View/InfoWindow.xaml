@@ -1,0 +1,120 @@
+﻿<Window
+    x:Class="UniqueRankList.View.InfoWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:UniqueRankList.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="220"
+    Height="175"
+    AllowsTransparency="True"
+    Background="#01000000"
+    Loaded="Window_Loaded"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    Topmost="True"
+    WindowStartupLocation="Manual"
+    WindowStyle="None">
+
+
+    <Grid Background="#01000000">
+
+        <Border
+            Padding="10"
+            Background="#AA000000"
+            CornerRadius="10">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+
+                    <TextBlock
+                        Margin="0,0,0,5"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Foreground="Lime"
+                        Text="Son Kesilme Zamanı:" />
+
+                </StackPanel>
+
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="Tiger Girl : " />
+
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding TigerGirl}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="Cerberus : " />
+
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding Cerberus}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="Captain Ivy : " />
+
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding CaptainIvy}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="Uruchi : " />
+
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding Uruchi}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="Isyutaru : " />
+
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding Isyutaru}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="Lord Yarkan : " />
+
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding LordYarkan}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="Demon Shaitan : " />
+
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding DemonShaitan}" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
