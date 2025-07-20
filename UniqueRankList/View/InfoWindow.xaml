@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:UniqueRankList.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Width="220"
+    Width="280"
     Height="175"
     AllowsTransparency="True"
     Background="#01000000"
@@ -21,100 +21,193 @@
 
         <Border
             Padding="10"
-            Background="#AA000000"
+            Background="#66000000"
             CornerRadius="10">
             <StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Margin="0,0,0,5"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="Lime"
+                    Text="Son Kesilme Zamanı:" />
 
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <!--  Boss Adı  -->
+                        <ColumnDefinition Width="Auto" />
+                        <!--  Zaman  -->
+                        <ColumnDefinition Width="Auto" />
+                        <!--  Katleden  -->
+                    </Grid.ColumnDefinitions>
+
+                    <!--  Satır tanımları  -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!--  Tiger Girl  -->
                     <TextBlock
-                        Margin="0,0,0,5"
-                        FontSize="16"
-                        FontWeight="Bold"
-                        Foreground="Lime"
-                        Text="Son Kesilme Zamanı:" />
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="Tiger Girl" />
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="5,0"
+                        FontSize="14"
+                        Foreground="WhiteSmoke"
+                        Text="{Binding TigerGirl}" />
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Margin="10,0"
+                        FontSize="12"
+                        Foreground="LightBlue"
+                        Text="{Binding TigerGirlKiller}" />
 
-                </StackPanel>
+                    <!--  Cerberus  -->
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="Cerberus" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="5,0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="{Binding Cerberus}" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Margin="10,0"
+                        FontSize="12"
+                        Foreground="LightBlue"
+                        Text="{Binding CerberusKiller}" />
 
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="Tiger Girl : " />
+                    <!--  Captain Ivy  -->
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="Captain Ivy" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="5,0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="{Binding CaptainIvy}" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Margin="10,0"
+                        FontSize="12"
+                        Foreground="LightBlue"
+                        Text="{Binding CaptainIvyKiller}" />
 
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="{Binding TigerGirl}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="Cerberus : " />
+                    <!--  Uruchi  -->
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="Uruchi" />
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="5,0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="{Binding Uruchi}" />
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        Margin="10,0"
+                        FontSize="12"
+                        Foreground="LightBlue"
+                        Text="{Binding UruchiKiller}" />
 
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="{Binding Cerberus}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="Captain Ivy : " />
+                    <!--  Isyutaru  -->
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="Isyutaru" />
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Margin="5,0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="{Binding Isyutaru}" />
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="2"
+                        Margin="10,0"
+                        FontSize="12"
+                        Foreground="LightBlue"
+                        Text="{Binding IsyutaruKiller}" />
 
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="{Binding CaptainIvy}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="Uruchi : " />
+                    <!--  Lord Yarkan  -->
+                    <TextBlock
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="Lord Yarkan" />
+                    <TextBlock
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Margin="5,0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="{Binding LordYarkan}" />
+                    <TextBlock
+                        Grid.Row="5"
+                        Grid.Column="2"
+                        Margin="10,0"
+                        FontSize="12"
+                        Foreground="LightBlue"
+                        Text="{Binding LordYarkanKiller}" />
 
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="{Binding Uruchi}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="Isyutaru : " />
-
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="{Binding Isyutaru}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="Lord Yarkan : " />
-
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="{Binding LordYarkan}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="Demon Shaitan : " />
-
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="White"
-                            Text="{Binding DemonShaitan}" />
-                    </StackPanel>
-                </StackPanel>
+                    <!--  Demon Shaitan  -->
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="Demon Shaitan" />
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Margin="5,0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="{Binding DemonShaitan}" />
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="2"
+                        Margin="10,0"
+                        FontSize="12"
+                        Foreground="LightBlue"
+                        Text="{Binding DemonShaitanKiller}" />
+                </Grid>
             </StackPanel>
         </Border>
+
     </Grid>
 </Window>

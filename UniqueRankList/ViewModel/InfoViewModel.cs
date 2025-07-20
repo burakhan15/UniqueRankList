@@ -87,6 +87,83 @@ namespace UniqueRankList.ViewModel
             }
         }
 
+        private string _tigerGirlKiller;
+        public string TigerGirlKiller
+        {
+            get => _tigerGirlKiller;
+            set
+            {
+                _tigerGirlKiller = value;
+                OnPropertyChanged(nameof(TigerGirlKiller));
+            }
+        }
+
+        private string _cerberusKiller;
+        public string CerberusKiller
+        {
+            get => _cerberusKiller;
+            set
+            {
+                _cerberusKiller = value;
+                OnPropertyChanged(nameof(CerberusKiller));
+            }
+        }
+
+        private string _captainIvyKiller;
+        public string CaptainIvyKiller
+        {
+            get => _captainIvyKiller;
+            set
+            {
+                _captainIvyKiller = value;
+                OnPropertyChanged(nameof(CaptainIvyKiller));
+            }
+        }
+
+        private string _uruchiKiller;
+        public string UruchiKiller
+        {
+            get => _uruchiKiller;
+            set
+            {
+                _uruchiKiller = value;
+                OnPropertyChanged(nameof(UruchiKiller));
+            }
+        }
+
+        private string _isyutaruKiller;
+        public string IsyutaruKiller
+        {
+            get => _isyutaruKiller;
+            set
+            {
+                _isyutaruKiller = value;
+                OnPropertyChanged(nameof(IsyutaruKiller));
+            }
+        }
+
+        private string _lordYarkanKiller;
+        public string LordYarkanKiller
+        {
+            get => _lordYarkanKiller;
+            set
+            {
+                _lordYarkanKiller = value;
+                OnPropertyChanged(nameof(LordYarkanKiller));
+            }
+        }
+
+        private string _demonShaitanKiller;
+        public string DemonShaitanKiller
+        {
+            get => _demonShaitanKiller;
+            set
+            {
+                _demonShaitanKiller = value;
+                OnPropertyChanged(nameof(DemonShaitanKiller));
+            }
+        }
+
         private bool _isCollapsed;
         public bool IsCollapsed
         {
@@ -111,7 +188,13 @@ namespace UniqueRankList.ViewModel
             Isyutaru = mainVM.Isyutaru;
             LordYarkan = mainVM.LordYarkan;
             DemonShaitan = mainVM.DemonShaitan;
-
+            TigerGirlKiller = mainVM.TigerGirlKiller;
+            CerberusKiller = mainVM.CerberusKiller;
+            CaptainIvyKiller = mainVM.CaptainIvyKiller;
+            UruchiKiller = mainVM.UruchiKiller;
+            IsyutaruKiller = mainVM.IsyutaruKiller;
+            LordYarkanKiller = mainVM.LordYarkanKiller;
+            DemonShaitanKiller = mainVM.DemonShaitanKiller;
             // Event'e abone ol
             mainVM.InfoUpdated += MainVM_InfoUpdated;
         }
@@ -127,6 +210,13 @@ namespace UniqueRankList.ViewModel
             Isyutaru = mainVM.Isyutaru;
             LordYarkan = mainVM.LordYarkan;
             DemonShaitan = mainVM.DemonShaitan;
+            TigerGirlKiller = mainVM.TigerGirlKiller;
+            CerberusKiller = mainVM.CerberusKiller;
+            CaptainIvyKiller = mainVM.CaptainIvyKiller;
+            UruchiKiller = mainVM.UruchiKiller;
+            IsyutaruKiller = mainVM.IsyutaruKiller;
+            LordYarkanKiller = mainVM.LordYarkanKiller;
+            DemonShaitanKiller = mainVM.DemonShaitanKiller;
         }
     }
 }

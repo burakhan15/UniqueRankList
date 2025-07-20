@@ -16,6 +16,7 @@
     <None Remove="Assets\Icons\demonshaitan.png" />
     <None Remove="Assets\Icons\european.png" />
     <None Remove="Assets\Icons\eye.png" />
+    <None Remove="Assets\Icons\info.png" />
     <None Remove="Assets\Icons\isyutaru.png" />
     <None Remove="Assets\Icons\logo.png" />
     <None Remove="Assets\Icons\lordyarkan.png" />
@@ -50,6 +51,9 @@
     <Resource Include="Assets\Icons\eye.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Icons\info.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Icons\isyutaru.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -71,6 +75,21 @@
     <Resource Include="Assets\Logos\Logo.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

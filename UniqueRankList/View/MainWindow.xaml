@@ -32,93 +32,202 @@
                 BorderBrush="#2C3E72"
                 BorderThickness="1"
                 MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button
-                        Width="30"
-                        Height="30"
-                        Click="Button_Click"
-                        Cursor="Hand"
-                        ToolTip="Minimize">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="BorderBrush" Value="Transparent" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Grid Background="{TemplateBinding Background}">
-                                                <TextBlock
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    FontSize="16"
-                                                    FontWeight="Bold"
-                                                    Foreground="White"
-                                                    Text="━" />
-                                            </Grid>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Background" Value="Gray" />
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                    <Button
-                        Width="30"
-                        Height="30"
-                        Command="{Binding CloseCommand}"
-                        Cursor="Hand"
-                        ToolTip="Close">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="BorderBrush" Value="Transparent" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Grid Background="{TemplateBinding Background}">
-                                                <TextBlock
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    FontSize="16"
-                                                    FontWeight="Bold"
-                                                    Foreground="White"
-                                                    Text="✕" />
-                                            </Grid>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Background" Value="Red" />
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                <Grid>
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Left"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="Yellow"
+                        Text="ANLIK UNIQUE VERİLERİ" />
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button
+                            Width="30"
+                            Height="30"
+                            Click="Button_Click"
+                            Cursor="Hand"
+                            ToolTip="Minimize">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid Background="{TemplateBinding Background}">
+                                                    <TextBlock
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="16"
+                                                        FontWeight="Bold"
+                                                        Foreground="White"
+                                                        Text="━" />
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="Gray" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button
+                            Width="30"
+                            Height="30"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="Close"
+                            Cursor="Hand"
+                            ToolTip="Close">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid Background="{TemplateBinding Background}">
+                                                    <TextBlock
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="16"
+                                                        FontWeight="Bold"
+                                                        Foreground="White"
+                                                        Text="✕" />
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="Red" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
 
-                </StackPanel>
+                    </StackPanel>
+                </Grid>
+
             </Border>
 
 
             <StackPanel
                 Grid.Row="1"
-                Margin="0,0,0,10"
-                Orientation="Vertical">
+                Margin="10"
+                Orientation="Horizontal">
                 <!--  Başlık  -->
-                <TextBlock
-                    HorizontalAlignment="Center"
-                    FontSize="20"
-                    FontWeight="Bold"
-                    Foreground="Yellow"
-                    Text="ANLIK UNIQUE VERİLERİ" />
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="Ülke Seçiniz : " />
+                    <ComboBox
+                        Width="250"
+                        Height="30"
+                        Margin="10,0,0,0"
+                        Padding="5,2"
+                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        BorderThickness="1"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Foreground="#FFC000"
+                        ItemsSource="{Binding Countries}"
+                        SelectedItem="{Binding SelectedCountry, Mode=TwoWay}">
+
+                        <ComboBox.Style>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ComboBox">
+                                            <Grid>
+                                                <ToggleButton
+                                                    x:Name="ToggleButton"
+                                                    Grid.Column="2"
+                                                    Background="#20356B"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    ClickMode="Press"
+                                                    Focusable="false"
+                                                    IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                                    <ContentPresenter />
+                                                </ToggleButton>
+                                                <ContentPresenter
+                                                    Name="ContentSite"
+                                                    Margin="6,3,25,3"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Content="{TemplateBinding SelectionBoxItem}"
+                                                    ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                    ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                    IsHitTestVisible="False" />
+                                                <Popup
+                                                    Name="Popup"
+                                                    AllowsTransparency="True"
+                                                    Focusable="False"
+                                                    IsOpen="{TemplateBinding IsDropDownOpen}"
+                                                    Placement="Bottom"
+                                                    PopupAnimation="Slide">
+                                                    <Grid
+                                                        Name="DropDown"
+                                                        MinWidth="{TemplateBinding ActualWidth}"
+                                                        MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                                        SnapsToDevicePixels="True">
+                                                        <Border
+                                                            x:Name="DropDownBorder"
+                                                            Background="#20356B"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="1" />
+                                                        <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                                        </ScrollViewer>
+                                                    </Grid>
+                                                </Popup>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ComboBox.Style>
+
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Setter Property="Background" Value="#0D2A63" />
+                                <Setter Property="Foreground" Value="#FFC000" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="FontSize" Value="18" />
+                                <Setter Property="Padding" Value="5,2" />
+                                <Setter Property="Height" Value="30" />
+                                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                <Setter Property="VerticalContentAlignment" Value="Center" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#111111" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#20356B" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                    </ComboBox>
+                    <Image
+                        Height="50"
+                        Margin="400,0,0,0"
+                        HorizontalAlignment="Right"
+                        Source="/Assets/Icons/logo.png" />
+                </StackPanel>
             </StackPanel>
             <StackPanel
                 Grid.Row="2"
-                Margin="0,0,0,10"
+                Margin="10"
                 Orientation="Horizontal">
                 <TextBlock
                     Margin="0,0,10,0"
@@ -218,7 +327,6 @@
                         </Style>
                     </ComboBox.ItemContainerStyle>
                 </ComboBox>
-
                 <Button
                     Width="250"
                     Height="30"
@@ -229,6 +337,7 @@
                     Background="#20356B"
                     BorderBrush="#20356B"
                     Command="{Binding ToggleOverlayCommand}"
+                    CommandParameter="Info"
                     Content="Bilgi Penceresini Aç/Kapa"
                     Cursor="Hand"
                     FontSize="18"
@@ -266,15 +375,136 @@
                         </Style>
                     </Button.Style>
                 </Button>
-               
-                <Image
-                    Height="50"
-                    Margin="240,0,0,0"
-                    HorizontalAlignment="Right"
-                    Source="/Assets/Icons/logo.png" />
+                <Grid Margin="10,0,0,0">
+                    <Grid.Resources>
+                        <Style x:Key="PopupStyle" TargetType="Popup">
+                            <Setter Property="IsOpen" Value="False" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=InfoImage}" Value="True">
+                                    <Setter Property="IsOpen" Value="True" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Resources>
 
+                    <ToggleButton
+                        x:Name="InfoToggleButton"
+                        Width="35"
+                        Height="35"
+                        Margin="10"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Cursor="Hand">
+                        <Image
+                            Width="25"
+                            Height="25"
+                            Source="/Assets/Icons/info.png" />
+                    </ToggleButton>
+
+                    <Popup
+                        AllowsTransparency="True"
+                        IsOpen="{Binding IsChecked, ElementName=InfoToggleButton}"
+                        Placement="Bottom"
+                        PlacementTarget="{Binding ElementName=InfoToggleButton}"
+                        PopupAnimation="Fade"
+                        StaysOpen="False"
+                        Style="{StaticResource PopupStyle}">
+
+                        <Grid Background="#0B1A35">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="60" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Padding="5"
+                                    Background="#4472C4"
+                                    FontWeight="Bold"
+                                    Foreground="White"
+                                    Text="Unique" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Padding="5"
+                                    Background="#4472C4"
+                                    FontWeight="Bold"
+                                    Foreground="White"
+                                    Text="Saat 1" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Padding="5"
+                                    Background="#4472C4"
+                                    FontWeight="Bold"
+                                    Foreground="White"
+                                    Text="Saat 2" />
+                                <TextBlock
+                                    Grid.Column="3"
+                                    Padding="5"
+                                    Background="#4472C4"
+                                    FontWeight="Bold"
+                                    Foreground="White"
+                                    Text="Saat 3" />
+                                <TextBlock
+                                    Grid.Column="4"
+                                    Padding="5"
+                                    Background="#4472C4"
+                                    FontWeight="Bold"
+                                    Foreground="White"
+                                    Text="Saat 4" />
+                            </Grid>
+
+                            <ItemsControl Grid.Row="1" ItemsSource="{Binding SpawnList}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="100" />
+                                                <ColumnDefinition Width="60" />
+                                                <ColumnDefinition Width="60" />
+                                                <ColumnDefinition Width="60" />
+                                                <ColumnDefinition Width="60" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock
+                                                Grid.Column="0"
+                                                Padding="5"
+                                                Text="{Binding UniqueName}" />
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Padding="5"
+                                                Text="{Binding ConvertedSpawnTimes[0]}" />
+                                            <TextBlock
+                                                Grid.Column="2"
+                                                Padding="5"
+                                                Text="{Binding ConvertedSpawnTimes[1]}" />
+                                            <TextBlock
+                                                Grid.Column="3"
+                                                Padding="5"
+                                                Text="{Binding ConvertedSpawnTimes[2]}" />
+                                            <TextBlock
+                                                Grid.Column="4"
+                                                Padding="5"
+                                                Text="{Binding ConvertedSpawnTimes[3]}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+
+                    </Popup>
+                </Grid>
             </StackPanel>
-            <Grid Grid.Row="3" Margin="0,0,0,10">
+            <Grid Grid.Row="3" Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
@@ -538,6 +768,10 @@
                 Background="#0B1A35"
                 BorderThickness="0"
                 CanUserAddRows="False"
+                CanUserReorderColumns="False"
+                CanUserResizeColumns="False"
+                CanUserResizeRows="False"
+                CanUserSortColumns="False"
                 FontSize="14"
                 Foreground="White"
                 GridLinesVisibility="None"
@@ -592,7 +826,37 @@
                                         Height="20"
                                         Margin="0,0,5,0"
                                         Source="{Binding KillerIcon}" />
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Killer}" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Cursor="Hand"
+                                        Foreground="LightBlue"
+                                        Text="{Binding Killer}">
+                                        <!--  Altı çizilen metin genelde link gibi görünür  -->
+
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="TextDecorations" Value="{x:Null}" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="TextDecorations">
+                                                            <Setter.Value>
+                                                                <TextDecorationCollection>
+                                                                    <TextDecoration Location="Underline" />
+                                                                </TextDecorationCollection>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+
+                                        <TextBlock.InputBindings>
+                                            <MouseBinding
+                                                Command="{Binding DataContext.KillerClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Gesture="LeftClick" />
+                                        </TextBlock.InputBindings>
+                                    </TextBlock>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

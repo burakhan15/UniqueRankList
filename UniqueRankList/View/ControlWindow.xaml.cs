@@ -29,7 +29,7 @@ namespace UniqueRankList.View
         {
             // Başlangıç konumu: ekranın sağ üstü (overlay ile hizalanacak)
             var screenWidth = SystemParameters.PrimaryScreenWidth;
-            Left = screenWidth - Width - 240;
+            Left = screenWidth - Width - 260;
             Top = 5;
         }
 

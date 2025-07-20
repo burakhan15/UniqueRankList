@@ -7,19 +7,30 @@ using System.Windows.Input;
 
 namespace UniqueRankList.Model
 {
-    public class RelayCommand : ICommand
+    public class RelayCommand<T> : ICommand
     {
-        private readonly Action _execute;
-        private readonly Func<bool> _canExecute;
+        private readonly Action<T> _execute;
+        private readonly Func<T, bool> _canExecute;
 
-        public RelayCommand(Action execute, Func<bool> canExecute = null)
+        public RelayCommand(Action<T> execute, Func<T, bool> canExecute = null)
         {
             _execute = execute;
-            _canExecute = canExecute ?? (() => true);
+            _canExecute = canExecute ?? (_ => true);
         }
 
         public event EventHandler CanExecuteChanged;
-        public bool CanExecute(object parameter) => _canExecute();
-        public void Execute(object parameter) => _execute();
+
+        public bool CanExecute(object parameter)
+        {
+            return parameter is T t && _canExecute(t);
+        }
+
+        public void Execute(object parameter)
+        {
+            if (parameter is T t)
+            {
+                _execute(t);
+            }
+        }
     }
 }

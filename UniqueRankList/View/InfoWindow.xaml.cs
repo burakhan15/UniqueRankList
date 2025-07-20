@@ -72,7 +72,7 @@ namespace UniqueRankList.View
 
             // Sağ üst köşe konumlandırması
             var screenWidth = SystemParameters.PrimaryScreenWidth;
-            Left = screenWidth - Width - 230;
+            Left = screenWidth - Width - 250;
             Top = 5;
 
             // Hook input
