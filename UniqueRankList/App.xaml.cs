@@ -25,40 +25,42 @@ namespace UniqueRankList
             if (!Directory.Exists(licenseFolder))
                 Directory.CreateDirectory(licenseFolder);
 
-            string licenseFilePath = Path.Combine(licenseFolder, "license.lic");
-        
-    
-            if (!File.Exists(licenseFilePath))
-            {
-                MessageBox.Show("Lisans dosyası bulunamadı. Lütfen lisans talebinde bulunun.", "Lisans Eksik", MessageBoxButton.OK, MessageBoxImage.Warning);
-                new LicenseRequestWindow().Show();
-            }
-            else
-            {
 
-                var bios = HardwareInfoService.GetBIOSSerial();
-                string encrypted = File.ReadAllText(licenseFilePath).Trim();
-                string decrypted;
-                try
-                {
-                    decrypted = AesEncryptionHelper.Decrypt(encrypted);
+            new MainWindow().Show();
+            //string licenseFilePath = Path.Combine(licenseFolder, "license.lic");
 
-                    if (decrypted == bios)
-                    {
-                        // Lisans geçerli, uygulamayı başlat
-                        new MainWindow().Show();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Geçersiz lisans dosyası. Lütfen yeni lisans talebinde bulunun.", "Lisans Eksik", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        new LicenseRequestWindow().Show();
-                    }
 
-                }
-                catch
-                {
-                }
-            }
+            //if (!File.Exists(licenseFilePath))
+            //{
+            //    MessageBox.Show("Lisans dosyası bulunamadı. Lütfen lisans talebinde bulunun.", "Lisans Eksik", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    new LicenseRequestWindow().Show();
+            //}
+            //else
+            //{
+
+            //    var bios = HardwareInfoService.GetBIOSSerial();
+            //    string encrypted = File.ReadAllText(licenseFilePath).Trim();
+            //    string decrypted;
+            //    try
+            //    {
+            //        decrypted = AesEncryptionHelper.Decrypt(encrypted);
+
+            //        if (decrypted == bios)
+            //        {
+            //            // Lisans geçerli, uygulamayı başlat
+            //            new MainWindow().Show();
+            //        }
+            //        else
+            //        {
+            //            MessageBox.Show("Geçersiz lisans dosyası. Lütfen yeni lisans talebinde bulunun.", "Lisans Eksik", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //            new LicenseRequestWindow().Show();
+            //        }
+
+            //    }
+            //    catch
+            //    {
+            //    }
+            //}
 
         }
     }
