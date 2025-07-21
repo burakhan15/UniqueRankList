@@ -376,16 +376,7 @@
                     </Button.Style>
                 </Button>
                 <Grid Margin="10,0,0,0">
-                    <Grid.Resources>
-                        <Style x:Key="PopupStyle" TargetType="Popup">
-                            <Setter Property="IsOpen" Value="False" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=InfoImage}" Value="True">
-                                    <Setter Property="IsOpen" Value="True" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Resources>
+
 
                     <ToggleButton
                         x:Name="InfoToggleButton"
@@ -408,8 +399,7 @@
                         Placement="Bottom"
                         PlacementTarget="{Binding ElementName=InfoToggleButton}"
                         PopupAnimation="Fade"
-                        StaysOpen="False"
-                        Style="{StaticResource PopupStyle}">
+                        StaysOpen="False">
 
                         <Grid Background="#0B1A35">
                             <Grid.RowDefinitions>
