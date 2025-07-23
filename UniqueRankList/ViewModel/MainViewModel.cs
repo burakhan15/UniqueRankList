@@ -20,6 +20,7 @@ namespace UniqueRankList.ViewModel
     {
         public ObservableCollection<UniqueInfo> UniqueList { get; set; }
         private readonly DispatcherTimer _timer;
+        private readonly DispatcherTimer _timer2;
         public ObservableCollection<ServerModels> ServerList { get; set; }
 
         private ServerModels selectedServer;
@@ -213,6 +214,8 @@ namespace UniqueRankList.ViewModel
         public ICommand ToggleOverlayCommand { get; }
 
         public ICommand CloseCommand { get; }
+
+        public ICommand RefreshCommand { get; }
         public ICommand KillerClickCommand => new RelayCommand<UniqueInfo>(OnKillerClicked);
 
         private readonly Dictionary<string, string> CountryTimeZones = new()
@@ -246,7 +249,16 @@ namespace UniqueRankList.ViewModel
 
             }
         }
-
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
+                OnPropertyChanged(nameof(IsBusy));
+            }
+        }
         private void OnKillerClicked(object obj)
         {
             var info = (UniqueInfo)obj;
@@ -274,7 +286,7 @@ namespace UniqueRankList.ViewModel
         }
 
         public ObservableCollection<UniqueSpawn> SpawnList { get; set; }
-
+        public ObservableCollection<ServerStatus> Servers { get; set; } = new();
         public MainViewModel()
         {
             _selectedCountry = Properties.Settings.Default.SelectedCountry ?? "Türkiye";
@@ -383,12 +395,14 @@ namespace UniqueRankList.ViewModel
                     },
                 };
 
-
-            _ = LoadDataAsync();
-            UpdateSpawnTimesByCountry();
-
             ToggleOverlayCommand = new RelayCommand<string>(ToggleOverlay);
             CloseCommand = new RelayCommand<string>(Close);
+            RefreshCommand = new AsyncRelayCommand(RefreshAllData);
+
+            _ = LoadDataAsync();
+           
+
+            UpdateSpawnTimesByCountry();
 
             _timer = new DispatcherTimer
             {
@@ -396,6 +410,33 @@ namespace UniqueRankList.ViewModel
             };
             _timer.Tick += async (s, e) => await LoadDataAsync();
             _timer.Start();
+
+            _ = LoadServerStatus();
+            _timer2 = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMinutes(2)
+            };
+            _timer2.Tick += async (s, e) => await LoadServerStatus();
+            _timer2.Start();
+        }
+
+        private async Task RefreshAllData()
+        {
+            IsBusy = true;
+
+            try
+            {
+                // Gerçek veri çekme işlemi
+                await Task.Run(async () =>
+                {
+                    await LoadDataAsync();
+                    await LoadServerStatus();
+                });
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private void Close(object obj)
@@ -543,10 +584,64 @@ namespace UniqueRankList.ViewModel
 
                 }
             }
-            catch (Exception)
+            catch
             {
             }
 
+        }
+
+        public async Task LoadServerStatus()
+        {
+            try
+            {
+                var url = "https://silkroad.gamegami.com/stats.php";
+                var httpClient = new HttpClient();
+                var html = await httpClient.GetStringAsync(url);
+
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html);
+
+                var sunucular = new List<ServerStatus>();
+
+                var rows = doc.DocumentNode.SelectNodes("//table[@class='table_stats']//tr[position()>1]");
+
+                if (rows != null)
+                {
+                    foreach (var row in rows)
+                    {
+                        var cols = row.SelectNodes("td");
+                        if (cols?.Count == 4)
+                        {
+                            string ad = cols[0].InnerText.Trim();
+                            string kapasite = cols[1].InnerText.Trim();
+                            string seviye = cols[2].InnerText.Trim();
+
+                            var durumDiv = cols[3].SelectSingleNode(".//div[last()]");
+                            string doluluk = cols[3].InnerText.Trim();
+                            string durum = durumDiv?.InnerText.Trim() ?? "";
+
+                            sunucular.Add(new ServerStatus
+                            {
+                                Name = ad,
+                                Capacity = kapasite,
+                                Level = seviye,
+                                Crowded = doluluk,
+                                Status = durum
+                            });
+                        }
+                    }
+                }
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Servers.Clear();
+                    foreach (var item in sunucular)
+                        Servers.Add(item);
+                });
+            }
+            catch
+            {
+            }      
         }
 
         public event EventHandler InfoUpdated;
@@ -629,5 +724,23 @@ namespace UniqueRankList.ViewModel
                 spawn.ConvertedSpawnTimes = convertedTimes;
             }
         }
+
+        public bool IsGameMaintenanceTimeBySelectedCountry(string selectedCountry)
+        {
+            var nowUtc = DateTimeOffset.UtcNow;
+
+            // Türkiye saatine göre "şimdi"
+            var turkeyZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+            var nowTR = TimeZoneInfo.ConvertTime(nowUtc, turkeyZone);
+
+            // Bakım günü ve saat kontrolü (Çarşamba 01:00 - 04:00)
+            bool isWithinMaintenance = nowTR.DayOfWeek == DayOfWeek.Wednesday &&
+                                       nowTR.TimeOfDay >= TimeSpan.FromHours(1) &&
+                                       nowTR.TimeOfDay < TimeSpan.FromHours(4);
+
+            return isWithinMaintenance;
+           
+        }
+
     }
 }

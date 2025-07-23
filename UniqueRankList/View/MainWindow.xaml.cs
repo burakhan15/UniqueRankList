@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using UniqueRankList.ViewModel;
 
 namespace UniqueRankList
@@ -12,7 +13,8 @@ namespace UniqueRankList
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+            var viewModel = new MainViewModel();
+            this.DataContext = viewModel;
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

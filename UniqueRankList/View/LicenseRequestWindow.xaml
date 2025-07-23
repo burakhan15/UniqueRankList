@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="LicenseRequestWindow"
     Width="500"
-    Height="500"
+    Height="300"
     Background="#0B0B0B"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -18,60 +18,31 @@
         <StackPanel Margin="50" VerticalAlignment="Center">
 
             <TextBlock
-                Margin="0,0,0,20"
+                Margin="0,0,0,10"
                 FontSize="24"
                 FontWeight="Bold"
                 Foreground="Gold"
                 Text="🛡️ LİSANS TALEP FORMU" />
+            <TextBlock
+                Margin="0,0,0,5"
+                Foreground="Red"
+                Text="*Uygulamaya erişmek için Lisans Verisini geliştiriciye gönderiniz." />
 
             <!--  Ad Soyad  -->
             <TextBlock
                 Margin="0,10,0,5"
                 Foreground="White"
-                Text="Ad Soyad" />
+                Text="Lisans Verisi :" />
             <TextBox
                 Padding="8"
                 Background="#1E1E1E"
                 BorderBrush="Gray"
-                FontSize="16"
+                FontSize="12"
                 Foreground="White"
-                Text="{Binding FullName}" />
+                IsReadOnly="True"
+                MaxLines="2"
+                Text="{Binding BiosData}" />
 
-            <!--  E-posta  -->
-            <TextBlock
-                Margin="0,15,0,5"
-                Foreground="White"
-                Text="E-posta" />
-            <TextBox
-                Padding="8"
-                Background="#1E1E1E"
-                BorderBrush="Gray"
-                FontSize="16"
-                Foreground="White"
-                Text="{Binding Email}" />
-
-            <!--  Gönder Butonu  -->
-            <Button
-                Margin="0,20,0,0"
-                Padding="12"
-                Background="DarkGreen"
-                Command="{Binding SubmitCommand}"
-                CommandParameter="Submit"
-                Content="LİSANS TALEP ET"
-                FontSize="16"
-                FontWeight="Bold"
-                Foreground="White" />
-
-            <Button
-                Margin="0,20,0,0"
-                Padding="12"
-                Background="DarkGreen"
-                Command="{Binding CheckLicenseCommand}"
-                CommandParameter="Submit"
-                Content="LİSANSI AKTİF ET"
-                FontSize="16"
-                FontWeight="Bold"
-                Foreground="White" />
         </StackPanel>
     </Grid>
 </Window>

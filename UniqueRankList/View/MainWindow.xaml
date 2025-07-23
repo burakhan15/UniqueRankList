@@ -2,31 +2,79 @@
     x:Class="UniqueRankList.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cv="clr-namespace:UniqueRankList.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:UniqueRankList"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tb="http://www.hardcodet.net/taskbar"
     Title="Anlık Unique Verileri"
-    Width="950"
-    Height="850"
+    Width="850"
+    Height="768"
     Background="#FF1E1E1E"
     Foreground="White"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <cv:ServerStatusBackgroundConverter x:Key="ServerStatusBackgroundConverter" />
+        <cv:CapacityToWidthConverter x:Key="CapacityToWidthConverter" />
+    </Window.Resources>
     <Border BorderBrush="#2C3E72" BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="20" />
             </Grid.RowDefinitions>
+            <Grid
+                x:Name="BusyOverlay"
+                Grid.Row="0"
+                Grid.RowSpan="7"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Panel.ZIndex="999"
+                Background="#80000000"
+                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
 
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Ellipse
+                        Width="60"
+                        Height="60"
+                        Opacity="0.5"
+                        Stroke="Red"
+                        StrokeThickness="6" />
+                    <Ellipse
+                        Width="60"
+                        Height="60"
+                        Stroke="Orange"
+                        StrokeDashArray="1 2"
+                        StrokeThickness="6">
+                        <Ellipse.RenderTransform>
+                            <RotateTransform x:Name="SpinnerRotate" Angle="0" CenterX="30" CenterY="30" />
+                        </Ellipse.RenderTransform>
+                        <Ellipse.Triggers>
+                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="SpinnerRotate"
+                                            Storyboard.TargetProperty="Angle"
+                                            From="0"
+                                            To="360"
+                                            Duration="0:0:1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Ellipse.Triggers>
+                    </Ellipse>
+                </Grid>
+            </Grid>
             <Border
                 Background="Black"
                 BorderBrush="#2C3E72"
@@ -113,11 +161,9 @@
                 </Grid>
 
             </Border>
-
-
             <StackPanel
                 Grid.Row="1"
-                Margin="10"
+                Margin="10,0,10,0"
                 Orientation="Horizontal">
                 <!--  Başlık  -->
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
@@ -220,14 +266,14 @@
                     </ComboBox>
                     <Image
                         Height="50"
-                        Margin="400,0,0,0"
+                        Margin="350,0,0,0"
                         HorizontalAlignment="Right"
                         Source="/Assets/Icons/logo.png" />
                 </StackPanel>
             </StackPanel>
             <StackPanel
                 Grid.Row="2"
-                Margin="10"
+                Margin="10,0,10,0"
                 Orientation="Horizontal">
                 <TextBlock
                     Margin="0,0,10,0"
@@ -334,17 +380,17 @@
                     Padding="5,2"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Background="#20356B"
-                    BorderBrush="#20356B"
                     Command="{Binding ToggleOverlayCommand}"
                     CommandParameter="Info"
                     Content="Bilgi Penceresini Aç/Kapa"
-                    Cursor="Hand"
-                    FontSize="18"
-                    FontWeight="Bold"
-                    Foreground="#FFC000">
+                    Cursor="Hand">
                     <Button.Style>
                         <Style TargetType="Button">
+                            <Setter Property="Background" Value="#20356B" />
+                            <Setter Property="BorderBrush" Value="#20356B" />
+                            <Setter Property="Foreground" Value="#FFC000" />
+                            <Setter Property="FontSize" Value="18" />
+                            <Setter Property="FontWeight" Value="Bold" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="Button">
@@ -360,7 +406,8 @@
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#111111" />
+                                                <Setter Property="Background" Value="#1D3D9D" />
+                                                <!--  Açık mavi  -->
                                             </Trigger>
                                             <Trigger Property="IsPressed" Value="True">
                                                 <Setter Property="Background" Value="#0D2A63" />
@@ -377,20 +424,52 @@
                 </Button>
                 <Grid Margin="10,0,0,0">
 
-
                     <ToggleButton
                         x:Name="InfoToggleButton"
-                        Width="35"
-                        Height="35"
-                        Margin="10"
-                        HorizontalAlignment="Right"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
+                        Width="150"
+                        Height="30"
+                        Padding="5,2"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Content="Event Saatleri"
                         Cursor="Hand">
-                        <Image
-                            Width="25"
-                            Height="25"
-                            Source="/Assets/Icons/info.png" />
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton">
+                                <Setter Property="Background" Value="#20356B" />
+                                <Setter Property="BorderBrush" Value="#20356B" />
+                                <Setter Property="Foreground" Value="#FFC000" />
+                                <Setter Property="FontSize" Value="18" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Border
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="0">
+                                                <ContentPresenter
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    RecognizesAccessKey="True" />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#1D3D9D" />
+                                                    <!--  Açık mavi  -->
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter Property="Background" Value="#0D2A63" />
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Opacity" Value="0.5" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ToggleButton.Style>
                     </ToggleButton>
 
                     <Popup
@@ -493,8 +572,151 @@
 
                     </Popup>
                 </Grid>
+                <Button
+                    Width="25"
+                    Height="25"
+                    Margin="50,0,0,0"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Command="{Binding RefreshCommand}"
+                    Cursor="Hand"
+                    ToolTip="Tüm Verileri Yenile">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Grid Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="Transparent" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                    <Viewbox Stretch="Uniform">
+                        <Canvas Width="24" Height="24">
+                            <Path Data="M12,4V1L8,5l4,4V6c3.31,0,6,2.69,6,6s-2.69,6-6,6s-6-2.69-6-6H4c0,4.42,3.58,8,8,8                         s8-3.58,8-8S16.42,4,12,4z" Fill="LightGray" />
+                        </Canvas>
+                    </Viewbox>
+                </Button>
             </StackPanel>
-            <Grid Grid.Row="3" Margin="10">
+            <DataGrid
+                Grid.Row="3"
+                Margin="10,0,10,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                AlternatingRowBackground="#121212"
+                AutoGenerateColumns="False"
+                Background="Black"
+                BorderBrush="#FF333333"
+                BorderThickness="1"
+                FontSize="12"
+                Foreground="White"
+                GridLinesVisibility="All"
+                HeadersVisibility="Column"
+                IsReadOnly="True"
+                ItemsSource="{Binding Servers}"
+                RowBackground="#0B0B15">
+
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Foreground" Value="Orange" />
+                        <Setter Property="FontSize" Value="16" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="Background" Value="#0B0B15" />
+                        <Setter Property="BorderBrush" Value="#FF333333" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="Padding" Value="5,2" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    </Style>
+
+                    <!--  Hücre Kenarlığı ve Boşluğu  -->
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="BorderBrush" Value="#FF333333" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="Padding" Value="5,2" />
+                        <!--  Hücre içi boşluk burada  -->
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Name}"
+                        Header="Sunucu">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Padding" Value="5,2" />
+                                <Setter Property="TextAlignment" Value="Left" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Capacity}"
+                        Header="Kapasite">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Padding" Value="5,2" />
+                                <Setter Property="TextAlignment" Value="Left" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Level}"
+                        Header="Seviye">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Padding" Value="5,2" />
+                                <Setter Property="TextAlignment" Value="Left" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTemplateColumn Width="*" Header="Doluluk Oranı">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Height="25" Background="Black">
+                                    <!--  Renkli doluluk barı  -->
+                                    <Border
+                                        Width="{Binding Capacity, Converter={StaticResource CapacityToWidthConverter}}"
+                                        Margin="0"
+                                        HorizontalAlignment="Left"
+                                        CornerRadius="3">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="{Binding Status, Converter={StaticResource ServerStatusBackgroundConverter}}" />
+                                            </Style>
+                                        </Border.Style>
+                                    </Border>
+                                    <!--  Metin katmanı  -->
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="White"
+                                        Text="{Binding Status}" />
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Row="4" Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
@@ -752,7 +974,7 @@
                 </Border>
             </Grid>
             <DataGrid
-                Grid.Row="4"
+                Grid.Row="5"
                 AlternatingRowBackground="#0D1425"
                 AutoGenerateColumns="False"
                 Background="#0B1A35"
@@ -858,7 +1080,7 @@
                         Header="Bölge" />
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel Grid.Row="5" Orientation="Horizontal">
+            <StackPanel Grid.Row="6" Orientation="Horizontal">
                 <TextBlock
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
@@ -873,14 +1095,13 @@
                     Text="{Binding LastUpdate}" />
             </StackPanel>
             <TextBlock
-                Grid.Row="5"
+                Grid.Row="7"
                 Margin="0,0,0,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 FontSize="12"
                 Foreground="White"
                 Text="Developed by Hecate" />
-
             <tb:TaskbarIcon
                 x:Name="MyNotifyIcon"
                 IconSource="/Assets/Logos/Logo.ico"
