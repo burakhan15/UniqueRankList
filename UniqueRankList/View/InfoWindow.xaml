@@ -5,18 +5,21 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:UniqueRankList.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Width="280"
-    Height="175"
+    Width="305"
+    Height="Auto"
     AllowsTransparency="True"
     Background="#01000000"
     Loaded="Window_Loaded"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
+    SizeToContent="Height"
     Topmost="True"
     WindowStartupLocation="Manual"
     WindowStyle="None">
 
-
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Window.Resources>
     <Grid Background="#01000000">
 
         <Border
@@ -29,7 +32,7 @@
                     FontSize="16"
                     FontWeight="Bold"
                     Foreground="Lime"
-                    Text="Son Kesilme Zamanı:" />
+                    Text="Son Kesilme Zamanı :" />
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -206,6 +209,28 @@
                         Foreground="LightBlue"
                         Text="{Binding DemonShaitanKiller}" />
                 </Grid>
+
+
+                <TextBlock
+                    FontSize="14"
+                    Foreground="Red"
+                    Text="{Binding UniqueWarningText}"
+                    TextAlignment="Left"
+                    Visibility="{Binding IsUniqueWarningVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard AutoReverse="True" RepeatBehavior="Forever">
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="Opacity"
+                                        From="1.0"
+                                        To="0.2"
+                                        Duration="0:0:0.5" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </TextBlock.Triggers>
+                </TextBlock>
             </StackPanel>
         </Border>
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -33,6 +34,7 @@ namespace UniqueRankList.ViewModel
                 {
                     selectedServer = value;
                     _ = LoadDataAsync();
+                    _ = LoadServerStatus();
                     OnPropertyChanged("SelectedServer");
                 }
             }
@@ -287,6 +289,64 @@ namespace UniqueRankList.ViewModel
 
         public ObservableCollection<UniqueSpawn> SpawnList { get; set; }
         public ObservableCollection<ServerStatus> Servers { get; set; } = new();
+
+
+        private DispatcherTimer _uniqueTimer;
+        private DispatcherTimer _countdownTimer;
+        private int _countdownMinutes;
+
+
+
+        private string _uniqueWarningText;
+        public string UniqueWarningText
+        {
+            get => _uniqueWarningText;
+            set
+            {
+                _uniqueWarningText = value;
+                OnPropertyChanged(nameof(UniqueWarningText));
+            }
+        }
+
+        private bool _isUniqueWarningVisible;
+        public bool IsUniqueWarningVisible
+        {
+            get => _isUniqueWarningVisible;
+            set
+            {
+                _isUniqueWarningVisible = value;
+                OnPropertyChanged(nameof(IsUniqueWarningVisible));
+            }
+        }
+
+
+        public List<UniqueSpawnTime> UniqueSpawns = new()
+        {
+            new UniqueSpawnTime("Medusa", 4),
+            new UniqueSpawnTime("Medusa", 14),
+            new UniqueSpawnTime("Medusa", 17),
+            new UniqueSpawnTime("Medusa", 22),
+
+            new UniqueSpawnTime("Neith", 7),
+            new UniqueSpawnTime("Neith", 21, 30),
+
+            new UniqueSpawnTime("Selketh", 7),
+            new UniqueSpawnTime("Selketh", 21, 30),
+
+            new UniqueSpawnTime("Anubis", 8, 30),
+            new UniqueSpawnTime("Anubis", 23),
+
+            new UniqueSpawnTime("Isis", 8, 30),
+            new UniqueSpawnTime("Isis", 23),
+
+            new UniqueSpawnTime("Haroeris", 10),
+            new UniqueSpawnTime("Haroeris", 00, 30),
+
+            new UniqueSpawnTime("Roc", 21, 0, new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Saturday })
+        };
+
+
+        private CancellationTokenSource _warningTokenSource;
         public MainViewModel()
         {
             _selectedCountry = Properties.Settings.Default.SelectedCountry ?? "Türkiye";
@@ -400,7 +460,7 @@ namespace UniqueRankList.ViewModel
             RefreshCommand = new AsyncRelayCommand(RefreshAllData);
 
             _ = LoadDataAsync();
-           
+
 
             UpdateSpawnTimesByCountry();
 
@@ -418,6 +478,8 @@ namespace UniqueRankList.ViewModel
             };
             _timer2.Tick += async (s, e) => await LoadServerStatus();
             _timer2.Start();
+
+            _ = StartUniqueSpawnChecker();
         }
 
         private async Task RefreshAllData()
@@ -620,14 +682,15 @@ namespace UniqueRankList.ViewModel
                             string doluluk = cols[3].InnerText.Trim();
                             string durum = durumDiv?.InnerText.Trim() ?? "";
 
-                            sunucular.Add(new ServerStatus
-                            {
-                                Name = ad,
-                                Capacity = kapasite,
-                                Level = seviye,
-                                Crowded = doluluk,
-                                Status = durum
-                            });
+                            if (ad == SelectedServer.Server)
+                                sunucular.Add(new ServerStatus
+                                {
+                                    Name = ad,
+                                    Capacity = kapasite,
+                                    Level = seviye,
+                                    Crowded = doluluk,
+                                    Status = durum
+                                });
                         }
                     }
                 }
@@ -641,7 +704,7 @@ namespace UniqueRankList.ViewModel
             }
             catch
             {
-            }      
+            }
         }
 
         public event EventHandler InfoUpdated;
@@ -739,7 +802,110 @@ namespace UniqueRankList.ViewModel
                                        nowTR.TimeOfDay < TimeSpan.FromHours(4);
 
             return isWithinMaintenance;
-           
+
+        }
+
+        private async Task StartUniqueSpawnChecker()
+        {
+            _uniqueTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(30)
+            };
+
+            _uniqueTimer.Tick += async (s, e) =>
+            {
+                // Her zaman Türkiye saatine göre kontrol yapılır
+                var turkeyZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+                var nowTR = TimeZoneInfo.ConvertTime(DateTimeOffset.Now, turkeyZone);
+
+                var upcomingByMinute = new Dictionary<DateTimeOffset, List<string>>();
+
+                foreach (var spawn in UniqueSpawns)
+                {
+                    if (!spawn.Days.Contains(nowTR.DayOfWeek))
+                        continue;
+
+                    var target = new DateTimeOffset(nowTR.Year, nowTR.Month, nowTR.Day, spawn.Hour, spawn.Minute, 0, turkeyZone.BaseUtcOffset);
+                    var diff = target - nowTR;
+
+                    if (diff.TotalMinutes >= 0 && diff.TotalMinutes <= 15)
+                    {
+                        if (!upcomingByMinute.ContainsKey(target))
+                            upcomingByMinute[target] = new();
+
+                        upcomingByMinute[target].Add(spawn.Name);
+                    }
+                }
+
+                if (upcomingByMinute.Any())
+                {
+                    var first = upcomingByMinute.OrderBy(kvp => kvp.Key).First();
+                    var targetTR = first.Key;
+                    var names = first.Value.Distinct().ToList();
+                    var minutesLeft = (int)Math.Ceiling((targetTR - nowTR).TotalMinutes);
+
+                    // Kullanıcının seçtiği ülke saatine çevir:
+                    DateTimeOffset userTime = targetTR;
+                    if (CountryTimeZones.TryGetValue(SelectedCountry, out var tzId) && tzId != "Turkey Standard Time")
+                    {
+                        var userZone = TimeZoneInfo.FindSystemTimeZoneById(tzId);
+                        userTime = TimeZoneInfo.ConvertTime(targetTR, userZone);
+                    }
+
+                    await ShowUniqueWarningAsync(names, minutesLeft, userTime);
+                }
+                else
+                {
+                    IsUniqueWarningVisible = false;
+                    OnPropertyChanged(nameof(IsUniqueWarningVisible));
+                }
+            };
+
+
+
+            _uniqueTimer.Start();
+        }
+
+        private async Task ShowUniqueWarningAsync(List<string> names, int minutesLeft, DateTimeOffset userTime)
+        {
+            _warningTokenSource?.Cancel();
+            _warningTokenSource = new CancellationTokenSource();
+            var token = _warningTokenSource.Token;
+
+            string namesText = string.Join(" ve ", names.Distinct());
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                UniqueWarningText = $"⚠️ {minutesLeft} dk içerisinde {namesText} çıkacaktır."; // Saat eklemek istersen: $" ({userTime:HH:mm})"
+                IsUniqueWarningVisible = true;
+                OnPropertyChanged(nameof(UniqueWarningText));
+                OnPropertyChanged(nameof(IsUniqueWarningVisible));
+            });
+
+            try
+            {
+                while (minutesLeft > 0)
+                {
+                    await Task.Delay(TimeSpan.FromMinutes(1), token);
+                    minutesLeft--;
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        UniqueWarningText = $"⚠️ {minutesLeft} dk içerisinde {namesText} çıkacaktır.";
+                        OnPropertyChanged(nameof(UniqueWarningText));
+                    });
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                IsUniqueWarningVisible = false;
+                OnPropertyChanged(nameof(IsUniqueWarningVisible));
+            });
         }
 
     }

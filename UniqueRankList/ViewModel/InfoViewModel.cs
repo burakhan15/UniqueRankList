@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using UniqueRankList.Model;
 
 namespace UniqueRankList.ViewModel
@@ -178,6 +180,32 @@ namespace UniqueRankList.ViewModel
 
         public double WindowWidth => IsCollapsed ? 50 : 300;
 
+
+
+
+        private string _uniqueWarningText;
+        public string UniqueWarningText
+        {
+            get => _uniqueWarningText;
+            set
+            {
+                _uniqueWarningText = value;
+                OnPropertyChanged(nameof(UniqueWarningText));
+            }
+        }
+
+        private bool _isUniqueWarningVisible;
+        public bool IsUniqueWarningVisible
+        {
+            get => _isUniqueWarningVisible;
+            set
+            {
+                _isUniqueWarningVisible = value;
+                OnPropertyChanged(nameof(IsUniqueWarningVisible));
+            }
+        }
+
+
         public InfoViewModel(MainViewModel mainVM)
         {
 
@@ -195,6 +223,9 @@ namespace UniqueRankList.ViewModel
             IsyutaruKiller = mainVM.IsyutaruKiller;
             LordYarkanKiller = mainVM.LordYarkanKiller;
             DemonShaitanKiller = mainVM.DemonShaitanKiller;
+            UniqueWarningText = mainVM.UniqueWarningText;
+            IsUniqueWarningVisible = mainVM.IsUniqueWarningVisible;
+
             // Event'e abone ol
             mainVM.InfoUpdated += MainVM_InfoUpdated;
         }
@@ -217,6 +248,10 @@ namespace UniqueRankList.ViewModel
             IsyutaruKiller = mainVM.IsyutaruKiller;
             LordYarkanKiller = mainVM.LordYarkanKiller;
             DemonShaitanKiller = mainVM.DemonShaitanKiller;
+            UniqueWarningText = mainVM.UniqueWarningText;
+            IsUniqueWarningVisible = mainVM.IsUniqueWarningVisible;
         }
+
+
     }
 }
