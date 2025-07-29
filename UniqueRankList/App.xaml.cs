@@ -1,7 +1,9 @@
 ﻿using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Windows;
 using UniqueRankList.Helper;
 using UniqueRankList.Services;
@@ -14,11 +16,36 @@ namespace UniqueRankList
     /// </summary>
     public partial class App : Application
     {
+        private static Mutex mutex;
+
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        private const int SW_RESTORE = 9;
+
         protected override void OnStartup(StartupEventArgs e)
         {
 
             try
             {
+                const string mutexName = "SilkroadHelperAppMutex";
+
+                bool createdNew;
+                mutex = new Mutex(true, mutexName, out createdNew);
+
+                if (!createdNew)
+                {
+                    // Başka bir örnek çalışıyorsa onu öne getir
+                    BringExistingInstanceToFront();
+                    Shutdown();
+                    return;
+                }
+
+
+
                 base.OnStartup(e);
 
                 Dispatcher.InvokeAsync(async () =>
@@ -40,6 +67,36 @@ namespace UniqueRankList
                 MessageBox.Show($"Uygulama hata verdi:\n{ex}");
             }
          
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            mutex?.ReleaseMutex();
+            mutex?.Dispose();
+            base.OnExit(e);
+        }
+
+        private void BringExistingInstanceToFront()
+        {
+            // Şu anki process
+            var current = Process.GetCurrentProcess();
+
+            // Aynı adı taşıyan diğer process'i bul (kendisi hariç)
+            var existingProcess = Process.GetProcessesByName(current.ProcessName)
+                .FirstOrDefault(p => p.Id != current.Id);
+
+            if (existingProcess != null)
+            {
+                IntPtr hWnd = existingProcess.MainWindowHandle;
+
+                if (hWnd != IntPtr.Zero)
+                {
+                    // Minimize durumdaysa restore et
+                    ShowWindow(hWnd, SW_RESTORE);
+                    // Öne getir
+                    SetForegroundWindow(hWnd);
+                }
+            }
         }
 
         public async Task<bool> LoadDataAsync()

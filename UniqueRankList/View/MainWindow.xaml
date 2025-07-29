@@ -1105,7 +1105,7 @@
             <tb:TaskbarIcon
                 x:Name="MyNotifyIcon"
                 IconSource="/Assets/Logos/Logo.ico"
-                ToolTipText="Uygulama Açıklaması">
+                ToolTipText="Silkroad Nexus">
                 <tb:TaskbarIcon.ContextMenu>
                     <ContextMenu>
                         <MenuItem Click="Show_Click" Header="Göster" />
