@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:UniqueRankList"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tb="http://www.hardcodet.net/taskbar"
+    Name="InstantUniqueRank"
     Title="Anlık Unique Verileri"
     Width="850"
     Height="768"
@@ -20,6 +21,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <cv:ServerStatusBackgroundConverter x:Key="ServerStatusBackgroundConverter" />
         <cv:CapacityToWidthConverter x:Key="CapacityToWidthConverter" />
+        <cv:EventToBrushConverter x:Key="EventToBrushConverter" />
     </Window.Resources>
     <Border BorderBrush="#2C3E72" BorderThickness="1">
         <Grid>
@@ -475,99 +477,118 @@
                     <Popup
                         AllowsTransparency="True"
                         IsOpen="{Binding IsChecked, ElementName=InfoToggleButton}"
-                        Placement="Bottom"
-                        PlacementTarget="{Binding ElementName=InfoToggleButton}"
+                        Placement="Center"
+                        PlacementTarget="{Binding ElementName=InstantUniqueRank}"
                         PopupAnimation="Fade"
                         StaysOpen="False">
 
                         <Grid Background="#0B1A35">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
+                            <DataGrid
+                                AlternatingRowBackground="#0D1425"
+                                AutoGenerateColumns="False"
+                                Background="#0B1A35"
+                                BorderThickness="0"
+                                CanUserAddRows="False"
+                                CanUserReorderColumns="False"
+                                CanUserResizeColumns="False"
+                                CanUserResizeRows="False"
+                                CanUserSortColumns="False"
+                                FontSize="14"
+                                Foreground="White"
+                                GridLinesVisibility="None"
+                                HeadersVisibility="Column"
+                                HorizontalGridLinesBrush="#2C3E72"
+                                IsReadOnly="True"
+                                ItemsSource="{Binding Schedule}"
+                                RowBackground="#121B2D"
+                                VerticalGridLinesBrush="#2C3E72">
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="#0D2A63" />
+                                        <Setter Property="Foreground" Value="#FFC000" />
+                                        <Setter Property="FontWeight" Value="Bold" />
+                                        <Setter Property="FontSize" Value="16" />
+                                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                        <Setter Property="BorderBrush" Value="#20356B" />
+                                        <Setter Property="Padding" Value="5,10" />
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
 
-                            <Grid Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="60" />
-                                    <ColumnDefinition Width="60" />
-                                    <ColumnDefinition Width="60" />
-                                    <ColumnDefinition Width="60" />
-                                </Grid.ColumnDefinitions>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Hour}" Header="Saat">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Monday, Converter={StaticResource EventToBrushConverter}}" />
+                                                <Setter Property="Foreground" Value="White" />
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
 
-                                <TextBlock
-                                    Grid.Column="0"
-                                    Padding="5"
-                                    Background="#4472C4"
-                                    FontWeight="Bold"
-                                    Foreground="White"
-                                    Text="Unique" />
-                                <TextBlock
-                                    Grid.Column="1"
-                                    Padding="5"
-                                    Background="#4472C4"
-                                    FontWeight="Bold"
-                                    Foreground="White"
-                                    Text="Saat 1" />
-                                <TextBlock
-                                    Grid.Column="2"
-                                    Padding="5"
-                                    Background="#4472C4"
-                                    FontWeight="Bold"
-                                    Foreground="White"
-                                    Text="Saat 2" />
-                                <TextBlock
-                                    Grid.Column="3"
-                                    Padding="5"
-                                    Background="#4472C4"
-                                    FontWeight="Bold"
-                                    Foreground="White"
-                                    Text="Saat 3" />
-                                <TextBlock
-                                    Grid.Column="4"
-                                    Padding="5"
-                                    Background="#4472C4"
-                                    FontWeight="Bold"
-                                    Foreground="White"
-                                    Text="Saat 4" />
-                            </Grid>
+                                    <DataGridTextColumn Binding="{Binding Monday}" Header="Pazartesi">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Monday, Converter={StaticResource EventToBrushConverter}}" />
+                                                <Setter Property="Foreground" Value="White" />
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
 
-                            <ItemsControl Grid.Row="1" ItemsSource="{Binding SpawnList}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="100" />
-                                                <ColumnDefinition Width="60" />
-                                                <ColumnDefinition Width="60" />
-                                                <ColumnDefinition Width="60" />
-                                                <ColumnDefinition Width="60" />
-                                            </Grid.ColumnDefinitions>
+                                    <DataGridTextColumn Binding="{Binding Tuesday}" Header="Salı">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Tuesday, Converter={StaticResource EventToBrushConverter}}" />
+                                                <Setter Property="Foreground" Value="White" />
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
 
-                                            <TextBlock
-                                                Grid.Column="0"
-                                                Padding="5"
-                                                Text="{Binding UniqueName}" />
-                                            <TextBlock
-                                                Grid.Column="1"
-                                                Padding="5"
-                                                Text="{Binding ConvertedSpawnTimes[0]}" />
-                                            <TextBlock
-                                                Grid.Column="2"
-                                                Padding="5"
-                                                Text="{Binding ConvertedSpawnTimes[1]}" />
-                                            <TextBlock
-                                                Grid.Column="3"
-                                                Padding="5"
-                                                Text="{Binding ConvertedSpawnTimes[2]}" />
-                                            <TextBlock
-                                                Grid.Column="4"
-                                                Padding="5"
-                                                Text="{Binding ConvertedSpawnTimes[3]}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                                    <DataGridTextColumn Binding="{Binding Wendesday}" Header="Çarşamba">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Wendesday, Converter={StaticResource EventToBrushConverter}}" />
+                                                <Setter Property="Foreground" Value="White" />
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Binding="{Binding Thursday}" Header="Perşembe">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Thursday, Converter={StaticResource EventToBrushConverter}}" />
+                                                <Setter Property="Foreground" Value="White" />
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Binding="{Binding Friday}" Header="Cuma">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Friday, Converter={StaticResource EventToBrushConverter}}" />
+                                                <Setter Property="Foreground" Value="White" />
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Binding="{Binding Saturday}" Header="Cumartesi">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Saturday, Converter={StaticResource EventToBrushConverter}}" />
+                                                <Setter Property="Foreground" Value="White" />
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Binding="{Binding Sunday}" Header="Pazar">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="{Binding Sunday, Converter={StaticResource EventToBrushConverter}}" />
+                                                <Setter Property="Foreground" Value="White" />
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </Grid>
 
                     </Popup>

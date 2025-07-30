@@ -47,9 +47,15 @@
     <None Remove="Assets\Icons\uruchi.png" />
     <None Remove="Assets\Logos\Logo.ico" />
     <None Remove="Assets\Logos\Logo.png" />
+    <None Remove="Etkinlik_Takvimi.xlsx" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Etkinlik_Takvimi.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
     <PackageReference Include="System.Management" Version="9.0.7" />

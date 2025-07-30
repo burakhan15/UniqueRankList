@@ -1,11 +1,15 @@
-﻿using HtmlAgilityPack;
+﻿using ClosedXML.Excel;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -248,6 +252,7 @@ namespace UniqueRankList.ViewModel
 
                 _ = LoadDataAsync();
                 UpdateSpawnTimesByCountry();
+                LoadEventSchedule();
 
             }
         }
@@ -319,6 +324,8 @@ namespace UniqueRankList.ViewModel
             }
         }
 
+        public ObservableCollection<ScheduleItem> Schedule { get; set; }
+
 
         public List<UniqueSpawnTime> UniqueSpawns = new()
         {
@@ -344,7 +351,7 @@ namespace UniqueRankList.ViewModel
 
             new UniqueSpawnTime("Roc", 21, 0, new List<DayOfWeek> { DayOfWeek.Wednesday, DayOfWeek.Saturday })
         };
-
+        public event EventHandler InfoUpdated;
 
         private CancellationTokenSource _warningTokenSource;
         public MainViewModel()
@@ -352,6 +359,7 @@ namespace UniqueRankList.ViewModel
             _selectedCountry = Properties.Settings.Default.SelectedCountry ?? "Türkiye";
 
             UniqueList = new ObservableCollection<UniqueInfo>();
+            Schedule = new ObservableCollection<ScheduleItem>();
             ServerList = new ObservableCollection<ServerModels>()
             {
                 new ServerModels{Server ="Troya", ServerID=2},
@@ -459,6 +467,9 @@ namespace UniqueRankList.ViewModel
             CloseCommand = new RelayCommand<string>(Close);
             RefreshCommand = new AsyncRelayCommand(RefreshAllData);
 
+
+
+
             _ = LoadDataAsync();
 
 
@@ -480,6 +491,9 @@ namespace UniqueRankList.ViewModel
             _timer2.Start();
 
             _ = StartUniqueSpawnChecker();
+
+
+            LoadEventSchedule();
         }
 
         private async Task RefreshAllData()
@@ -500,12 +514,10 @@ namespace UniqueRankList.ViewModel
                 IsBusy = false;
             }
         }
-
         private void Close(object obj)
         {
             Application.Current.Shutdown();
         }
-
         private void ToggleOverlay(object obj)
         {
             if (_overlayWindow == null || !_overlayWindow.IsVisible)
@@ -651,7 +663,6 @@ namespace UniqueRankList.ViewModel
             }
 
         }
-
         public async Task LoadServerStatus()
         {
             try
@@ -705,15 +716,11 @@ namespace UniqueRankList.ViewModel
             catch
             {
             }
-        }
-
-        public event EventHandler InfoUpdated;
-
+        }      
         protected virtual void OnInfoUpdated()
         {
             InfoUpdated?.Invoke(this, EventArgs.Empty);
         }
-
         public string ConvertToSelectedTimeZone(string turkishTime, string selectedCountry)
         {
             try
@@ -787,7 +794,6 @@ namespace UniqueRankList.ViewModel
                 spawn.ConvertedSpawnTimes = convertedTimes;
             }
         }
-
         public bool IsGameMaintenanceTimeBySelectedCountry(string selectedCountry)
         {
             var nowUtc = DateTimeOffset.UtcNow;
@@ -804,7 +810,6 @@ namespace UniqueRankList.ViewModel
             return isWithinMaintenance;
 
         }
-
         private async Task StartUniqueSpawnChecker()
         {
             _uniqueTimer = new DispatcherTimer
@@ -865,7 +870,6 @@ namespace UniqueRankList.ViewModel
 
             _uniqueTimer.Start();
         }
-
         private async Task ShowUniqueWarningAsync(List<string> names, int minutesLeft, DateTimeOffset userTime)
         {
             _warningTokenSource?.Cancel();
@@ -907,6 +911,86 @@ namespace UniqueRankList.ViewModel
                 OnPropertyChanged(nameof(IsUniqueWarningVisible));
             });
         }
+        public static DataTable LoadEmbeddedExcel()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            using var stream = assembly.GetManifestResourceStream("UniqueRankList.Etkinlik_Takvimi.xlsx");
 
+            if (stream == null) throw new FileNotFoundException("Embedded resource not found.");
+
+            using var workbook = new XLWorkbook(stream);
+            var worksheet = workbook.Worksheet(1);
+
+            var dataTable = new DataTable();
+
+            var firstRow = worksheet.FirstRowUsed();
+            foreach (var cell in firstRow.Cells())
+            {
+                dataTable.Columns.Add(cell.Value.ToString());
+            }
+
+            foreach (var row in worksheet.RowsUsed().Skip(1))
+            {
+                var newRow = dataTable.NewRow();
+                for (int i = 0; i < dataTable.Columns.Count; i++)
+                {
+                    newRow[i] = row.Cell(i + 1).Value.ToString();
+                }
+                dataTable.Rows.Add(newRow);
+            }
+
+            return dataTable;
+        }
+        public void LoadAndConvertSchedule(DataTable table, string selectedCountry)
+        {
+            try
+            {
+
+                foreach (DataRow row in table.Rows)
+                {
+                    var originalTime = row["Saat"].ToString();
+
+                    var today = DateTime.Today;
+
+                    // Saat: dakika olarak ayrıştır
+                    if (TimeSpan.TryParse(originalTime, out var timePart))
+                    {
+                        var dateTime = today.Date.Add(timePart);
+                        string formatted = dateTime.ToString("dd.MM.yyyy HH:mm");
+
+                        var convertedTime = ConvertToSelectedTimeZone(formatted, selectedCountry);
+
+                        DateTime tDateTime = DateTime.ParseExact(convertedTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+
+                        string hourPart = tDateTime.ToString("HH:mm");
+
+                        Schedule.Add(new ScheduleItem
+                        {
+                            Hour = hourPart,
+                            Monday = row["Pazartesi"].ToString(),
+                            Tuesday = row["Salı"].ToString(),
+                            Wendesday = row["Çarşamba"].ToString(),
+                            Thursday = row["Perşembe"].ToString(),
+                            Friday = row["Cuma"].ToString(),
+                            Saturday = row["Cumartesi"].ToString(),
+                            Sunday = row["Pazar"].ToString()
+                        });
+                    }
+
+
+                }
+
+            }
+            catch
+            {
+            }
+          
+        }
+        private void LoadEventSchedule()
+        {
+            Schedule.Clear();
+            var dt = LoadEmbeddedExcel();
+            LoadAndConvertSchedule(dt, SelectedCountry);
+        }
     }
 }
