@@ -594,8 +594,11 @@ namespace UniqueRankList.ViewModel
                     foreach (var unique in uniqueNames)
                     {
                         var lastKill = filteredByUnique[unique].LastOrDefault();
+
+                        string[] formats = { "d.M.yyyy HH:mm", "dd.MM.yyyy HH:mm" };
+
                         if (lastKill != null &&
-                        DateTime.TryParseExact(lastKill.KillTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var killDateTime))
+                        DateTime.TryParseExact(lastKill.KillTime, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var killDateTime))
                         {
                             DateTime selectedNow = GetCurrentTimeInTimeZone(SelectedCountry);
 
@@ -726,7 +729,9 @@ namespace UniqueRankList.ViewModel
             try
             {
                 var culture = new CultureInfo("tr-TR");
-                if (DateTime.TryParseExact(turkishTime, "dd.MM.yyyy HH:mm", culture, DateTimeStyles.None, out var parsedTime))
+                string[] formats = { "d.M.yyyy HH:mm", "dd.MM.yyyy HH:mm" };
+
+                if (DateTime.TryParseExact(turkishTime, formats, culture, DateTimeStyles.None, out var parsedTime))
                 {
                     var turkeyTime = new DateTimeOffset(parsedTime, TimeSpan.FromHours(3)); // Türkiye GMT+3
 
