@@ -34,20 +34,63 @@
   <ItemGroup>
     <None Remove="Assets\Icons\captainivy.png" />
     <None Remove="Assets\Icons\cerberus.png" />
+    <None Remove="Assets\Icons\character_info_bg.png" />
+    <None Remove="Assets\Icons\chardetails_labelbg.png" />
     <None Remove="Assets\Icons\chinese.png" />
+    <None Remove="Assets\Icons\clothes_11_ha_set_b.png" />
     <None Remove="Assets\Icons\demonshaitan.png" />
     <None Remove="Assets\Icons\european.png" />
+    <None Remove="Assets\Icons\eu_earring_11_set_b.png" />
     <None Remove="Assets\Icons\eye.png" />
     <None Remove="Assets\Icons\info.png" />
     <None Remove="Assets\Icons\isyutaru.png" />
     <None Remove="Assets\Icons\logo.png" />
     <None Remove="Assets\Icons\lordyarkan.png" />
+    <None Remove="Assets\Icons\seal.png" />
     <None Remove="Assets\Icons\server_check.png" />
     <None Remove="Assets\Icons\tigergirl.png" />
     <None Remove="Assets\Icons\uruchi.png" />
     <None Remove="Assets\Logos\Logo.ico" />
     <None Remove="Assets\Logos\Logo.png" />
+    <None Remove="Assets\Test\14740.PNG" />
+    <None Remove="Assets\Test\accessory_bg.png" />
+    <None Remove="Assets\Test\clothes_11_aa_set_b.PNG" />
+    <None Remove="Assets\Test\clothes_11_ba_set_b.PNG" />
+    <None Remove="Assets\Test\clothes_11_fa_set_b.PNG" />
+    <None Remove="Assets\Test\clothes_11_ha_set_b.png" />
+    <None Remove="Assets\Test\clothes_11_la_set_b.PNG" />
+    <None Remove="Assets\Test\clothes_11_sa_set_b.PNG" />
+    <None Remove="Assets\Test\e060529_gacha_golddragonflag.PNG" />
+    <None Remove="Assets\Test\european.png" />
+    <None Remove="Assets\Test\eu_earring_11_set_b.png" />
+    <None Remove="Assets\Test\eu_necklace_11_set_b.PNG" />
+    <None Remove="Assets\Test\eu_ring_11_set_b.PNG" />
+    <None Remove="Assets\Test\eu_tstaff_11_set_a.PNG" />
+    <None Remove="Assets\Test\inventoryDiv_bg.png" />
+    <None Remove="Assets\Test\inventory_bg.png" />
+    <None Remove="Assets\Test\item_hp_potion.png" />
+    <None Remove="Assets\Test\item_mp_potion.png" />
+    <None Remove="Assets\Test\mall_avatar_w_amalrun.PNG" />
+    <None Remove="Assets\Test\mall_avatar_w_bigattachdress_2013_hat.PNG" />
+    <None Remove="Assets\Test\mall_avatar_w_carnival.PNG" />
+    <None Remove="Assets\Test\mall_avatar_w_chingchu_attach.PNG" />
+    <None Remove="Assets\Test\plus_button.png" />
     <None Remove="Etkinlik_Takvimi.xlsx" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Resource Include="Assets\Icons\character_info_bg.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\chardetails_labelbg.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\seal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\inventoryDiv_bg.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   
   <ItemGroup>
@@ -106,6 +149,72 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Logos\Logo.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\14740.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\accessory_bg.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\clothes_11_aa_set_b.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\clothes_11_ba_set_b.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\clothes_11_fa_set_b.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\clothes_11_ha_set_b.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\clothes_11_la_set_b.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\clothes_11_sa_set_b.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\e060529_gacha_golddragonflag.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\european.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\eu_earring_11_set_b.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\eu_necklace_11_set_b.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\eu_ring_11_set_b.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\eu_tstaff_11_set_a.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\inventory_bg.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\item_hp_potion.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\item_mp_potion.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\mall_avatar_w_amalrun.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\mall_avatar_w_bigattachdress_2013_hat.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\mall_avatar_w_carnival.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\mall_avatar_w_chingchu_attach.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Test\plus_button.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

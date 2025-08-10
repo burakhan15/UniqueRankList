@@ -1,0 +1,736 @@
+﻿<Window
+    x:Class="UniqueRankList.View.CharacterDetailWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cv="clr-namespace:UniqueRankList.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helper="clr-namespace:UniqueRankList.Helper"
+    xmlns:local="clr-namespace:UniqueRankList.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Name="CharacterDetail"
+    Title="Karakter Detayı"
+    Width="922"
+    Height="510"
+    Background="#000000"
+    Foreground="#000000"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2Vis" />
+    </Window.Resources>
+
+    <Border BorderBrush="#2C3E72" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid
+                x:Name="BusyOverlay"
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Panel.ZIndex="999"
+                Background="#80000000"
+                Visibility="{Binding IsBusy, Converter={StaticResource Bool2Vis}}">
+
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Ellipse
+                        Width="60"
+                        Height="60"
+                        Opacity="0.5"
+                        Stroke="Red"
+                        StrokeThickness="6" />
+                    <Ellipse
+                        Width="60"
+                        Height="60"
+                        Stroke="Orange"
+                        StrokeDashArray="1 2"
+                        StrokeThickness="6">
+                        <Ellipse.RenderTransform>
+                            <RotateTransform x:Name="SpinnerRotate" Angle="0" CenterX="30" CenterY="30" />
+                        </Ellipse.RenderTransform>
+                        <Ellipse.Triggers>
+                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="SpinnerRotate"
+                                            Storyboard.TargetProperty="Angle"
+                                            From="0"
+                                            To="360"
+                                            Duration="0:0:1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Ellipse.Triggers>
+                    </Ellipse>
+                </Grid>
+            </Grid>
+            <Border
+                Grid.Row="0"
+                Padding="10"
+                CornerRadius="5">
+                <Border.Background>
+                    <ImageBrush ImageSource="/Assets/Icons/chardetails_labelbg.png" Stretch="UniformToFill" />
+                </Border.Background>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--  Karakter Portresi  -->
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                        <Border
+                            Width="68"
+                            Height="94"
+                            BorderBrush="Gray"
+                            BorderThickness="1">
+                            <Image Source="{Binding CharacterImage}" Stretch="Fill" />
+                        </Border>
+                        <TextBlock
+                            Margin="0,3,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="10"
+                            Foreground="White"
+                            Text="Teodora" />
+                    </StackPanel>
+
+                    <!--  Karakter Bilgileri  -->
+                    <StackPanel Grid.Column="1" VerticalAlignment="Top">
+                        <TextBlock
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="{Binding CharName}" />
+                        <TextBlock>
+                            <Run Foreground="White" Text="Karakter Puanı: " />
+                            <Run
+                                FontWeight="Bold"
+                                Foreground="#FFC000"
+                                Text="{Binding CharPoint}" />
+                        </TextBlock>
+                    </StackPanel>
+
+                    <!--  Seviye  -->
+                    <StackPanel
+                        Grid.Column="2"
+                        VerticalAlignment="Bottom"
+                        Orientation="Horizontal">
+                        <Image
+                            Width="18"
+                            Height="18"
+                            Margin="0,0,5,0"
+                            Source="/Assets/Test/european.png" />
+                        <TextBlock
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="#FFC000"
+                            Text="Seviye: " />
+                        <TextBlock
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="#FFC000"
+                            Text="{Binding Level}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Grid Grid.Row="1">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Grid>
+                    <Grid.Background>
+                        <ImageBrush ImageSource="/Assets/Test/inventoryDiv_bg.PNG" Stretch="UniformToFill" />
+                    </Grid.Background>
+
+                    <!--  Ekipman Paneli  -->
+                    <Image
+                        Width="178"
+                        Height="315"
+                        Margin="30,20,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Panel.ZIndex="1"
+                        Source="/Assets/Test/inventory_bg.png" />
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,0,338,255"
+                        Panel.ZIndex="1">
+                        <Image Source="{Binding Weapon}" Tag="{Binding WeaponID}" />
+                        <!--  Üst katman: Seal (kare kare güncellenecek)  -->
+                        <Image
+                            x:Name="SealWeapon"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasWeaponSeal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,0,92,254"
+                        Panel.ZIndex="1">
+                        <Image Source="{Binding Shield}" Tag="{Binding ShieldID}" />
+
+                        <Image
+                            x:Name="SealShield"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasShieldSeal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,0,350,105"
+                        Panel.ZIndex="1">
+                        <Image Source="{Binding Head}" Tag="{Binding HeadID}" />
+                        <Image
+                            x:Name="SealHat"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasHatSeal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,0,350,21"
+                        Panel.ZIndex="1">
+                        <Image Source="{Binding Chest}" Tag="{Binding ChestID}" />
+                        <Image
+                            x:Name="SealChest"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasChestSeal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,17,350,-50"
+                        Panel.ZIndex="1">
+                        <Image Source="{Binding Legs}" Tag="{Binding LegsID}" />
+                        <Image
+                            x:Name="SealLegs"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasLegsSeal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,17,80,-50"
+                        Panel.ZIndex="1">
+                        <Image Source="{Binding Foot}" Tag="{Binding FootID}" />
+                        <Image
+                            x:Name="SealFoot"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasFootSeal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,0,80,19"
+                        Panel.ZIndex="1">
+                        <Image Source="{Binding Hand}" Tag="{Binding HandID}" />
+                        <Image
+                            x:Name="SealHand"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasHandSeal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,0,80,107"
+                        Panel.ZIndex="1">
+                        <Image Source="{Binding Shoulder}" Tag="{Binding ShoulderID}" />
+                        <Image
+                            x:Name="SealShoulders"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasSholdersSeal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,101,80,-50"
+                        Panel.ZIndex="1">
+
+                        <Image Source="{Binding Necklace}" Tag="{Binding NecklaceID}" />
+                        <Image
+                            x:Name="SealNecklace"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasNecklaceSeal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,187,80,-50"
+                        Panel.ZIndex="1">
+                        <Image Source="{Binding RingOne}" Tag="{Binding RingOneID}" />
+                        <Image
+                            x:Name="SealRing1"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasRing1Seal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,103,350,-50"
+                        Panel.ZIndex="1">
+                        <Image Source="{Binding Earring}" Tag="{Binding EarringID}" />
+                        <Image
+                            x:Name="SealEarring"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasEarringSeal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+
+                    <Grid
+                        Width="32"
+                        Height="32"
+                        Margin="0,189,350,-50"
+                        Panel.ZIndex="1">
+                        <Image Source="{Binding RingTwo}" Tag="{Binding RingTwoID}" />
+                        <Image
+                            x:Name="SealRing2"
+                            Width="32"
+                            Height="32"
+                            IsHitTestVisible="False"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            Visibility="{Binding HasRing2Seal, Converter={StaticResource Bool2Vis}}" />
+                    </Grid>
+
+                    <Grid
+                        Margin="230,210,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top">
+
+
+                        <!--  Başlık  -->
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            VerticalAlignment="Top"
+                            Panel.ZIndex="10"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="#FFC000"
+                            Text="Aksesuarlar" />
+
+                        <!--  Aksesuar Slotları  -->
+                        <Image
+                            Width="172"
+                            Height="129"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Source="/Assets/Test/accessory_bg.png" />
+
+                        <Image
+                            Width="32"
+                            Height="32"
+                            Margin="0,0,116,28"
+                            Panel.ZIndex="1"
+                            Source="{Binding Avatar}"
+                            Tag="{Binding AvatarID}" />
+
+                        <Image
+                            Width="32"
+                            Height="32"
+                            Margin="0,0,28,28"
+                            Panel.ZIndex="1"
+                            Source="{Binding AvatarHat}"
+                            Tag="{Binding AvatarHatID}" />
+
+                        <Image
+                            Width="32"
+                            Height="32"
+                            Margin="60,0,0,28"
+                            Panel.ZIndex="1"
+                            Source="{Binding AvatarAcc}"
+                            Tag="{Binding AvatarAccID}" />
+
+                        <Image
+                            Width="32"
+                            Height="32"
+                            Margin="0,67,118,0"
+                            Panel.ZIndex="1"
+                            Source="{Binding Devil}"
+                            Tag="{Binding DevilID}" />
+
+                        <Image
+                            Width="32"
+                            Height="32"
+                            Margin="0,67,28,0"
+                            Panel.ZIndex="1"
+                            Source="{Binding Flag}"
+                            Tag="{Binding FlagID}" />
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Column="1">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="128" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <StackPanel Margin="10" Background="Black">
+
+                            <!--  Karakter Adı  -->
+                            <Border
+                                Padding="5"
+                                BorderBrush="#444"
+                                BorderThickness="1,1,1,1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="#FFC000" Text="Karakter Adı" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Foreground="White"
+                                        Text=":" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Foreground="White"
+                                        Text="{Binding CharName}" />
+                                </Grid>
+                            </Border>
+
+                            <!--  Takma Adı  -->
+                            <Border
+                                Padding="5"
+                                BorderBrush="#444"
+                                BorderThickness="1,1,1,1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="#FFC000" Text="Takma Adı" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Foreground="White"
+                                        Text=":" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Foreground="White"
+                                        Text="{Binding JobName}" />
+                                </Grid>
+                            </Border>
+
+                            <!--  Guild  -->
+                            <Border
+                                Padding="5"
+                                BorderBrush="#444"
+                                BorderThickness="1,1,1,1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="#FFC000" Text="Guild" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Foreground="White"
+                                        Text=":" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Foreground="White"
+                                        Text="{Binding Guild}" />
+                                </Grid>
+                            </Border>
+
+                            <!--  Irk  -->
+                            <Border
+                                Padding="5"
+                                BorderBrush="#444"
+                                BorderThickness="1,1,1,1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="#FFC000" Text="Irk" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Foreground="White"
+                                        Text=":" />
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                        <TextBlock Foreground="White" Text="{Binding Race}" />
+                                        <Image
+                                            Width="16"
+                                            Height="16"
+                                            Margin="5,0,0,0"
+                                            Source="{Binding RaceIcon}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!--  Seviye  -->
+                            <Border
+                                Padding="5"
+                                BorderBrush="#444"
+                                BorderThickness="1,1,1,1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="#FFC000" Text="Seviye" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Foreground="White"
+                                        Text=":" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Foreground="White"
+                                        Text="{Binding Level}" />
+                                </Grid>
+                            </Border>
+
+                            <!--  Onur Puanı  -->
+                            <Border
+                                Padding="5"
+                                BorderBrush="#444"
+                                BorderThickness="1,1,1,1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="#FFC000" Text="Onur Puanı" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Foreground="White"
+                                        Text=":" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Foreground="White"
+                                        Text="{Binding HonorPoint}" />
+                                </Grid>
+                            </Border>
+
+                            <!--  Ünvan  -->
+                            <Border
+                                Padding="5"
+                                BorderBrush="#444"
+                                BorderThickness="1,1,1,1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="#FFC000" Text="Ünvan" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Foreground="White"
+                                        Text=":" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Foreground="White"
+                                        Text="{Binding Title}" />
+                                </Grid>
+                            </Border>
+
+                        </StackPanel>
+
+
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <Border
+                            Margin="10"
+                            Padding="5"
+                            BorderBrush="#444444"
+                            BorderThickness="1"
+                            CornerRadius="4">
+                            <Border.Background>
+                                <ImageBrush ImageSource="/Assets/Icons/character_info_bg.png" Stretch="UniformToFill" />
+                            </Border.Background>
+
+                            <Grid Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="1" />
+                                    <!--  Orta çizgi  -->
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Sol Panel - Diğer Bilgiler  -->
+                                <StackPanel
+                                    Grid.Column="0"
+                                    Height="128"
+                                    Margin="0,0,10,0">
+                                    <TextBlock
+                                        Margin="0,0,0,10"
+                                        FontWeight="Bold"
+                                        Foreground="#FFC000"
+                                        Text="Diğer Bilgiler" />
+
+                                    <!--  HP  -->
+                                    <StackPanel Margin="0,2" Orientation="Horizontal">
+                                        <Image
+                                            Width="20"
+                                            Height="20"
+                                            Margin="0,0,5,0"
+                                            Source="/Assets/Test/item_hp_potion.png" />
+                                        <TextBlock
+                                            FontWeight="Bold"
+                                            Foreground="White"
+                                            Text="{Binding HP}" />
+                                        <ProgressBar
+                                            Width="80"
+                                            Height="12"
+                                            Margin="10,4,0,0"
+                                            Background="#55000000"
+                                            Foreground="Red"
+                                            Maximum="100"
+                                            Value="100" />
+                                    </StackPanel>
+
+                                    <!--  MP  -->
+                                    <StackPanel Margin="0,2" Orientation="Horizontal">
+                                        <Image
+                                            Width="20"
+                                            Height="20"
+                                            Margin="0,0,5,0"
+                                            Source="/Assets/Test/item_mp_potion.png" />
+                                        <TextBlock
+                                            FontWeight="Bold"
+                                            Foreground="White"
+                                            Text="{Binding MP}" />
+                                        <ProgressBar
+                                            Width="80"
+                                            Height="12"
+                                            Margin="10,4,0,0"
+                                            Background="#55000000"
+                                            Foreground="Blue"
+                                            Maximum="100"
+                                            Value="100" />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!--  Dikey Ayırıcı Çizgi  -->
+                                <Border
+                                    Grid.Column="1"
+                                    Width="1"
+                                    Margin="5,0"
+                                    BorderBrush="#444444"
+                                    BorderThickness="1" />
+
+                                <!--  Sağ Panel - Karakter Yapılandırması  -->
+                                <StackPanel
+                                    Grid.Column="2"
+                                    Height="128"
+                                    Margin="10,0,0,0">
+                                    <TextBlock
+                                        Margin="0,0,0,10"
+                                        FontWeight="Bold"
+                                        Foreground="#FFC000"
+                                        Text="Karakter Yapılandırması" />
+
+                                    <!--  STR  -->
+                                    <StackPanel Margin="0,2" Orientation="Horizontal">
+                                        <Image
+                                            Width="18"
+                                            Height="18"
+                                            Margin="0,0,5,0"
+                                            Source="/Assets/Test/plus_button.png" />
+                                        <TextBlock
+                                            Margin="0,0,5,0"
+                                            FontWeight="Bold"
+                                            Foreground="#FFC000"
+                                            Text="{Binding STR}" />
+                                        <TextBlock Foreground="White" Text="Kuvvet (STR)" />
+                                    </StackPanel>
+
+                                    <!--  INT  -->
+                                    <StackPanel Margin="0,2" Orientation="Horizontal">
+                                        <Image
+                                            Width="18"
+                                            Height="18"
+                                            Margin="0,0,5,0"
+                                            Source="/Assets/Test/plus_button.png" />
+                                        <TextBlock
+                                            Margin="0,0,5,0"
+                                            FontWeight="Bold"
+                                            Foreground="#FFC000"
+                                            Text="{Binding INT}" />
+                                        <TextBlock Foreground="White" Text="Zihin Gücü (INT)" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+
+</Window>

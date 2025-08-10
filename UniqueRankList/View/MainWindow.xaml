@@ -22,6 +22,70 @@
         <cv:ServerStatusBackgroundConverter x:Key="ServerStatusBackgroundConverter" />
         <cv:CapacityToWidthConverter x:Key="CapacityToWidthConverter" />
         <cv:EventToBrushConverter x:Key="EventToBrushConverter" />
+
+        <!--  Koyu temaya uygun TabControl  -->
+        <Style TargetType="TabControl">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <DockPanel>
+                                <!--  Sekmeler  -->
+                                <TabPanel
+                                    Margin="0,0,0,1"
+                                    Background="#1a1a1a"
+                                    DockPanel.Dock="Top"
+                                    IsItemsHost="True" />
+                                <!--  İçerik  -->
+                                <ContentPresenter
+                                    x:Name="PART_SelectedContentHost"
+                                    Margin="1"
+                                    ContentSource="SelectedContent" />
+                            </DockPanel>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="#101010" />
+        </Style>
+
+        <!--  Sekmelerin görünümü  -->
+        <Style TargetType="TabItem">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="Margin" Value="2,2,2,0" />
+            <Setter Property="Background" Value="#222" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border
+                            Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="#333"
+                            BorderThickness="1"
+                            CornerRadius="5,5,0,0">
+                            <ContentPresenter
+                                x:Name="ContentSite"
+                                Margin="10,2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                ContentSource="Header" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#0f3d7d" />
+                                <Setter Property="Foreground" Value="Gold" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2a2a2a" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Border BorderBrush="#2C3E72" BorderThickness="1">
         <Grid>
@@ -737,6 +801,398 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+
+            <TabControl
+                Grid.Row="5"
+                Background="#1E1E1E"
+                BorderThickness="0"
+                Foreground="White">
+                <TabItem Header="Anlık Unique Verileri">
+                    <DataGrid
+                        AlternatingRowBackground="#0D1425"
+                        AutoGenerateColumns="False"
+                        Background="#0B1A35"
+                        BorderThickness="0"
+                        CanUserAddRows="False"
+                        CanUserReorderColumns="False"
+                        CanUserResizeColumns="False"
+                        CanUserResizeRows="False"
+                        CanUserSortColumns="False"
+                        FontSize="14"
+                        Foreground="White"
+                        GridLinesVisibility="None"
+                        HeadersVisibility="Column"
+                        HorizontalGridLinesBrush="#2C3E72"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding UniqueList}"
+                        RowBackground="#121B2D"
+                        VerticalGridLinesBrush="#2C3E72">
+
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#0D2A63" />
+                                <Setter Property="Foreground" Value="#FFC000" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="FontSize" Value="16" />
+                                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                <Setter Property="BorderBrush" Value="#20356B" />
+                                <Setter Property="Padding" Value="5,10" />
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+
+                        <DataGrid.Resources>
+                            <Style x:Key="CenteredTextStyle" TargetType="TextBlock">
+                                <Setter Property="Margin" Value="10" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Unique}"
+                                ElementStyle="{StaticResource CenteredTextStyle}"
+                                Header="Unique" />
+                            <DataGridTextColumn
+                                Width="150"
+                                Binding="{Binding SpawnTime}"
+                                ElementStyle="{StaticResource CenteredTextStyle}"
+                                Header="Ortaya Çıkma" />
+                            <DataGridTextColumn
+                                Width="150"
+                                Binding="{Binding KillTime}"
+                                ElementStyle="{StaticResource CenteredTextStyle}"
+                                Header="Kesilme" />
+                            <DataGridTemplateColumn Width="150" Header="Öldüren">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                            <Image
+                                                Width="20"
+                                                Height="20"
+                                                Margin="0,0,5,0"
+                                                Source="{Binding KillerIcon}" />
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                Cursor="Hand"
+                                                Foreground="LightBlue"
+                                                Text="{Binding Killer}">
+                                                <!--  Altı çizilen metin genelde link gibi görünür  -->
+
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="TextDecorations" Value="{x:Null}" />
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="TextDecorations">
+                                                                    <Setter.Value>
+                                                                        <TextDecorationCollection>
+                                                                            <TextDecoration Location="Underline" />
+                                                                        </TextDecorationCollection>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+
+                                                <TextBlock.InputBindings>
+                                                    <MouseBinding
+                                                        Command="{Binding DataContext.KillerClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}"
+                                                        Gesture="LeftClick" />
+                                                </TextBlock.InputBindings>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Region}"
+                                ElementStyle="{StaticResource CenteredTextStyle}"
+                                Header="Bölge" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Honor Rank">
+                    <DataGrid
+                        AlternatingRowBackground="#0D1425"
+                        AutoGenerateColumns="False"
+                        Background="#0B1A35"
+                        BorderThickness="0"
+                        CanUserAddRows="False"
+                        CanUserReorderColumns="False"
+                        CanUserResizeColumns="False"
+                        CanUserResizeRows="False"
+                        CanUserSortColumns="False"
+                        FontSize="14"
+                        Foreground="White"
+                        GridLinesVisibility="None"
+                        HeadersVisibility="Column"
+                        HorizontalGridLinesBrush="#2C3E72"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding HonorRankList}"
+                        RowBackground="#121B2D"
+                        VerticalGridLinesBrush="#2C3E72">
+
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#0D2A63" />
+                                <Setter Property="Foreground" Value="#FFC000" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="FontSize" Value="16" />
+                                <Setter Property="BorderThickness" Value="10,0,0,1" />
+                                <Setter Property="BorderBrush" Value="#0D2A63" />
+                                <Setter Property="Padding" Value="5,10" />
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Padding" Value="8,4" />
+                                <Setter Property="Margin" Value="2" />
+                            </Style>
+
+                            <Style x:Key="CenteredTextStyle" TargetType="TextBlock">
+                                <Setter Property="Margin" Value="10" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <!--  1. Madalya + Sıra  -->
+                            <DataGridTemplateColumn Width="60" Header="No">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                            <Image
+                                                Width="16"
+                                                Height="16"
+                                                Margin="0,0,5,0"
+                                                Source="{Binding MedalIcon}" />
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                Foreground="White"
+                                                Text="{Binding Rank}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!--  2. Irk  -->
+                            <DataGridTemplateColumn Width="60" Header="Irk">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image
+                                            Width="20"
+                                            Height="20"
+                                            HorizontalAlignment="Center"
+                                            Source="{Binding RaceIcon}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!--  3. Karakter Adı  -->
+                            <DataGridTemplateColumn Width="150" Header="Karakter">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Cursor="Hand"
+                                            Foreground="LightBlue"
+                                            Text="{Binding CharacterName}">
+                                            <!--  Altı çizilen metin genelde link gibi görünür  -->
+
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="TextDecorations" Value="{x:Null}" />
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="TextDecorations">
+                                                                <Setter.Value>
+                                                                    <TextDecorationCollection>
+                                                                        <TextDecoration Location="Underline" />
+                                                                    </TextDecorationCollection>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+
+                                            <TextBlock.InputBindings>
+                                                <MouseBinding
+                                                    Command="{Binding DataContext.KillerClickHonorCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Gesture="LeftClick" />
+                                            </TextBlock.InputBindings>
+                                        </TextBlock>
+
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!--  4. Puan  -->
+                            <DataGridTextColumn
+                                Width="80"
+                                Binding="{Binding Points}"
+                                Header="Puan" />
+
+                            <!--  5. Değişim Oku  -->
+                            <DataGridTemplateColumn Width="80" Header="Değişim">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image
+                                            Width="16"
+                                            Height="16"
+                                            HorizontalAlignment="Center"
+                                            Source="{Binding ChangeIcon}">
+                                            <Image.ToolTip>
+                                                <TextBlock FontSize="12" Text="{Binding ChangeDescription}" />
+                                            </Image.ToolTip>
+                                        </Image>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Player Rank">
+                    <DataGrid
+                        AlternatingRowBackground="#0D1425"
+                        AutoGenerateColumns="False"
+                        Background="#0B1A35"
+                        BorderThickness="0"
+                        CanUserAddRows="False"
+                        CanUserReorderColumns="False"
+                        CanUserResizeColumns="False"
+                        CanUserResizeRows="False"
+                        CanUserSortColumns="False"
+                        FontSize="14"
+                        Foreground="White"
+                        GridLinesVisibility="None"
+                        HeadersVisibility="Column"
+                        HorizontalGridLinesBrush="#2C3E72"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding PlayerRaankList}"
+                        RowBackground="#121B2D"
+                        VerticalGridLinesBrush="#2C3E72">
+
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#0D2A63" />
+                                <Setter Property="Foreground" Value="#FFC000" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="FontSize" Value="16" />
+                                <Setter Property="BorderThickness" Value="10,0,0,1" />
+                                <Setter Property="BorderBrush" Value="#0D2A63" />
+                                <Setter Property="Padding" Value="5,10" />
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Padding" Value="8,4" />
+                                <Setter Property="Margin" Value="2" />
+                            </Style>
+
+                            <Style x:Key="CenteredTextStyle" TargetType="TextBlock">
+                                <Setter Property="Margin" Value="10" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="60" Header="#">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                            <Image
+                                                Width="16"
+                                                Height="16"
+                                                Margin="0,0,5,0"
+                                                Source="{Binding MedalIcon}" />
+                                            <TextBlock VerticalAlignment="Center" Text="{Binding Rank}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Width="60" Header="Irk">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image
+                                            Width="20"
+                                            Height="20"
+                                            HorizontalAlignment="Center"
+                                            Source="{Binding RaceIcon}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Width="150" Header="Karakter">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Cursor="Hand"
+                                            Foreground="LightBlue"
+                                            Text="{Binding CharacterName}">
+                                            <!--  Altı çizilen metin genelde link gibi görünür  -->
+
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="TextDecorations" Value="{x:Null}" />
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="TextDecorations">
+                                                                <Setter.Value>
+                                                                    <TextDecorationCollection>
+                                                                        <TextDecoration Location="Underline" />
+                                                                    </TextDecorationCollection>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+
+                                            <TextBlock.InputBindings>
+                                                <MouseBinding
+                                                    Command="{Binding DataContext.KillerClickPlayerCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Gesture="LeftClick" />
+                                            </TextBlock.InputBindings>
+                                        </TextBlock>
+
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn
+                                Width="100"
+                                Binding="{Binding Points}"
+                                Header="Puan" />
+
+                            <DataGridTemplateColumn Width="80" Header="Değişim">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image
+                                            Width="18"
+                                            Height="18"
+                                            HorizontalAlignment="Center"
+                                            Source="{Binding ChangeIcon}">
+                                            <Image.ToolTip>
+                                                <TextBlock FontSize="12" Text="{Binding ChangeDescription}" />
+                                            </Image.ToolTip>
+                                        </Image>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+
+
             <Grid Grid.Row="4" Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -994,113 +1450,7 @@
                     </StackPanel>
                 </Border>
             </Grid>
-            <DataGrid
-                Grid.Row="5"
-                AlternatingRowBackground="#0D1425"
-                AutoGenerateColumns="False"
-                Background="#0B1A35"
-                BorderThickness="0"
-                CanUserAddRows="False"
-                CanUserReorderColumns="False"
-                CanUserResizeColumns="False"
-                CanUserResizeRows="False"
-                CanUserSortColumns="False"
-                FontSize="14"
-                Foreground="White"
-                GridLinesVisibility="None"
-                HeadersVisibility="Column"
-                HorizontalGridLinesBrush="#2C3E72"
-                IsReadOnly="True"
-                ItemsSource="{Binding UniqueList}"
-                RowBackground="#121B2D"
-                VerticalGridLinesBrush="#2C3E72">
 
-                <DataGrid.ColumnHeaderStyle>
-                    <Style TargetType="DataGridColumnHeader">
-                        <Setter Property="Background" Value="#0D2A63" />
-                        <Setter Property="Foreground" Value="#FFC000" />
-                        <Setter Property="FontWeight" Value="Bold" />
-                        <Setter Property="FontSize" Value="16" />
-                        <Setter Property="BorderThickness" Value="0,0,0,1" />
-                        <Setter Property="BorderBrush" Value="#20356B" />
-                        <Setter Property="Padding" Value="5,10" />
-                    </Style>
-                </DataGrid.ColumnHeaderStyle>
-
-                <DataGrid.Resources>
-                    <Style x:Key="CenteredTextStyle" TargetType="TextBlock">
-                        <Setter Property="Margin" Value="10" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                    </Style>
-                </DataGrid.Resources>
-
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding Unique}"
-                        ElementStyle="{StaticResource CenteredTextStyle}"
-                        Header="Unique" />
-                    <DataGridTextColumn
-                        Width="150"
-                        Binding="{Binding SpawnTime}"
-                        ElementStyle="{StaticResource CenteredTextStyle}"
-                        Header="Ortaya Çıkma" />
-                    <DataGridTextColumn
-                        Width="150"
-                        Binding="{Binding KillTime}"
-                        ElementStyle="{StaticResource CenteredTextStyle}"
-                        Header="Kesilme" />
-                    <DataGridTemplateColumn Width="150" Header="Öldüren">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                                    <Image
-                                        Width="20"
-                                        Height="20"
-                                        Margin="0,0,5,0"
-                                        Source="{Binding KillerIcon}" />
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        Cursor="Hand"
-                                        Foreground="LightBlue"
-                                        Text="{Binding Killer}">
-                                        <!--  Altı çizilen metin genelde link gibi görünür  -->
-
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="TextDecorations" Value="{x:Null}" />
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="TextDecorations">
-                                                            <Setter.Value>
-                                                                <TextDecorationCollection>
-                                                                    <TextDecoration Location="Underline" />
-                                                                </TextDecorationCollection>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-
-                                        <TextBlock.InputBindings>
-                                            <MouseBinding
-                                                Command="{Binding DataContext.KillerClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                CommandParameter="{Binding}"
-                                                Gesture="LeftClick" />
-                                        </TextBlock.InputBindings>
-                                    </TextBlock>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding Region}"
-                        ElementStyle="{StaticResource CenteredTextStyle}"
-                        Header="Bölge" />
-                </DataGrid.Columns>
-            </DataGrid>
             <StackPanel Grid.Row="6" Orientation="Horizontal">
                 <TextBlock
                     HorizontalAlignment="Left"

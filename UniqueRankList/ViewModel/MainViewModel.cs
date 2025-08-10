@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.EMMA;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -24,6 +26,8 @@ namespace UniqueRankList.ViewModel
     public class MainViewModel : ViewModelBase
     {
         public ObservableCollection<UniqueInfo> UniqueList { get; set; }
+        public ObservableCollection<HonorRank> HonorRankList { get; set; }
+        public ObservableCollection<PlayerRank> PlayerRaankList { get; set; }
         private readonly DispatcherTimer _timer;
         private readonly DispatcherTimer _timer2;
         public ObservableCollection<ServerModels> ServerList { get; set; }
@@ -210,7 +214,7 @@ namespace UniqueRankList.ViewModel
         }
 
         string[] uniqueNames = new[]
-       {
+        {
             "Tiger Girl", "Cerberus", "Captain Ivy", "Uruchi", "Isyutaru", "Lord Yarkan", "Demon Shaitan"
         };
 
@@ -223,6 +227,8 @@ namespace UniqueRankList.ViewModel
 
         public ICommand RefreshCommand { get; }
         public ICommand KillerClickCommand => new RelayCommand<UniqueInfo>(OnKillerClicked);
+        public ICommand KillerClickHonorCommand => new RelayCommand<HonorRank>(OnKillerHonorClicked);
+        public ICommand KillerClickPlayerCommand => new RelayCommand<PlayerRank>(OnKillerPlayerClicked);
 
         private readonly Dictionary<string, string> CountryTimeZones = new()
         {
@@ -268,30 +274,42 @@ namespace UniqueRankList.ViewModel
         }
         private void OnKillerClicked(object obj)
         {
+
             var info = (UniqueInfo)obj;
 
             if (info == null || string.IsNullOrWhiteSpace(info.Killer))
                 return;
 
-            string url = $"https://silkroad.gamegami.com/character.php?shardid={SelectedServer.ServerID}&char={info.Killer}";
-
-            try
-            {
-                // .NET Core / .NET 5+ için:
-                var psi = new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true // Bu şart!
-                };
-                System.Diagnostics.Process.Start(psi);
-            }
-            catch (Exception ex)
-            {
-                // Hata yönetimi
-                MessageBox.Show("Bağlantı açılamadı: " + ex.Message);
-            }
+            CharacterDetailWindow characterDetailWindow = new CharacterDetailWindow();
+            characterDetailWindow.DataContext = new CharacterDetailViewModel(SelectedServer.ServerID, info.Killer);
+            characterDetailWindow.ShowDialog();
         }
 
+        private void OnKillerHonorClicked(object obj)
+        {
+
+            var info = (HonorRank)obj;
+
+            if (info == null || string.IsNullOrWhiteSpace(info.CharacterName))
+                return;
+
+            CharacterDetailWindow characterDetailWindow = new CharacterDetailWindow();
+            characterDetailWindow.DataContext = new CharacterDetailViewModel(SelectedServer.ServerID, info.CharacterName);
+            characterDetailWindow.ShowDialog();
+        }
+
+        private void OnKillerPlayerClicked(object obj)
+        {
+
+            var info = (PlayerRank)obj;
+
+            if (info == null || string.IsNullOrWhiteSpace(info.CharacterName))
+                return;
+
+            CharacterDetailWindow characterDetailWindow = new CharacterDetailWindow();
+            characterDetailWindow.DataContext = new CharacterDetailViewModel(SelectedServer.ServerID, info.CharacterName);
+            characterDetailWindow.ShowDialog();
+        }
         public ObservableCollection<UniqueSpawn> SpawnList { get; set; }
         public ObservableCollection<ServerStatus> Servers { get; set; } = new();
 
@@ -354,12 +372,15 @@ namespace UniqueRankList.ViewModel
         public event EventHandler InfoUpdated;
 
         private CancellationTokenSource _warningTokenSource;
+        private const string BaseUrl = "https://silkroad.gamegami.com/";
         public MainViewModel()
         {
             _selectedCountry = Properties.Settings.Default.SelectedCountry ?? "Türkiye";
 
             UniqueList = new ObservableCollection<UniqueInfo>();
             Schedule = new ObservableCollection<ScheduleItem>();
+            HonorRankList = new ObservableCollection<HonorRank>();
+            PlayerRaankList = new ObservableCollection<PlayerRank>();
             ServerList = new ObservableCollection<ServerModels>()
             {
                 new ServerModels{Server ="Troya", ServerID=2},
@@ -471,6 +492,8 @@ namespace UniqueRankList.ViewModel
 
 
             _ = LoadDataAsync();
+            _ = LoadHonorRankAsync();
+            _ = LoadPlayerRankAsync();
 
 
             UpdateSpawnTimesByCountry();
@@ -487,7 +510,12 @@ namespace UniqueRankList.ViewModel
             {
                 Interval = TimeSpan.FromMinutes(2)
             };
-            _timer2.Tick += async (s, e) => await LoadServerStatus();
+            _timer2.Tick += async (s, e) =>
+            {
+                await LoadServerStatus();
+                await LoadHonorRankAsync();
+                await LoadPlayerRankAsync();
+            };
             _timer2.Start();
 
             _ = StartUniqueSpawnChecker();
@@ -507,6 +535,8 @@ namespace UniqueRankList.ViewModel
                 {
                     await LoadDataAsync();
                     await LoadServerStatus();
+                    await LoadHonorRankAsync();
+                    await LoadPlayerRankAsync();
                 });
             }
             finally
@@ -719,7 +749,7 @@ namespace UniqueRankList.ViewModel
             catch
             {
             }
-        }      
+        }
         protected virtual void OnInfoUpdated()
         {
             InfoUpdated?.Invoke(this, EventArgs.Empty);
@@ -728,10 +758,10 @@ namespace UniqueRankList.ViewModel
         {
             try
             {
-                var culture = new CultureInfo("tr-TR");
+                //var culture = new CultureInfo("tr-TR");
                 string[] formats = { "d.M.yyyy HH:mm", "dd.MM.yyyy HH:mm" };
 
-                if (DateTime.TryParseExact(turkishTime, formats, culture, DateTimeStyles.None, out var parsedTime))
+                if (DateTime.TryParseExact(turkishTime, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedTime))
                 {
                     var turkeyTime = new DateTimeOffset(parsedTime, TimeSpan.FromHours(3)); // Türkiye GMT+3
 
@@ -743,10 +773,15 @@ namespace UniqueRankList.ViewModel
                         return convertedTime.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
                     }
                 }
+                else
+                {
+                    return "asdasd";
+                }
             }
-            catch
+            catch (Exception ex)
             {
                 // Hata durumu
+                return ex.Message;
             }
 
             return turkishTime;
@@ -989,7 +1024,7 @@ namespace UniqueRankList.ViewModel
             catch
             {
             }
-          
+
         }
         private void LoadEventSchedule()
         {
@@ -997,5 +1032,116 @@ namespace UniqueRankList.ViewModel
             var dt = LoadEmbeddedExcel();
             LoadAndConvertSchedule(dt, SelectedCountry);
         }
+        private async Task LoadHonorRankAsync()
+        {
+            var url = $"https://silkroad.gamegami.com/ranking_honor.php?id={SelectedServer.ServerID}";
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
+
+            var html = await client.GetStringAsync(url);
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var rows = doc.DocumentNode
+                .SelectNodes("//table[@class='table_rank']/tr")
+                ?.Skip(1); // İlk satır başlık
+
+            if (rows != null)
+            {
+                foreach (var row in rows)
+                {
+                    var cells = row.SelectNodes("td");
+                    if (cells == null || cells.Count < 6)
+                        continue;
+
+                    var rankText = cells[1].InnerText.Trim();
+                    var rank = int.TryParse(rankText, out var r) ? r : 0;
+
+                    var raceImg = cells[2].SelectSingleNode("img")?.GetAttributeValue("src", "") ?? "";
+                    var race = raceImg.Contains("chinese") ? "Chinese" :
+                               raceImg.Contains("european") ? "European" : "Unknown";
+
+                    var name = cells[3].InnerText.Trim();
+                    var pointsText = cells[4].InnerText.Trim();
+                    var points = int.TryParse(pointsText, out var p) ? p : 0;
+
+                    var medalIcon = cells[0].SelectSingleNode("img")?.GetAttributeValue("src", "");
+                    var raceIcon = cells[2].SelectSingleNode("img")?.GetAttributeValue("src", "");
+                    var changeImg = cells[5].SelectSingleNode(".//img");
+                    var changeIconSrc = changeImg?.GetAttributeValue("src", "");
+                    var changeIconTitle = changeImg?.GetAttributeValue("title", "");
+
+                 
+                    HonorRankList.Add(new HonorRank
+                    {
+                        Rank = rank,
+                        MedalIcon = medalIcon != null ? BaseUrl + medalIcon : null,
+                        RaceIcon = raceIcon != null ? BaseUrl + raceIcon : null,
+                        CharacterName = name,
+                        Points = points,
+                        ChangeIcon = changeIconSrc != null ? BaseUrl + changeIconSrc : null,
+                        ChangeDescription = changeIconTitle
+                    });
+                }
+            }
+        } 
+        private string GetFullImageUrl(string src)
+        {
+            if (string.IsNullOrWhiteSpace(src))
+                return null;
+
+            return src.StartsWith("http") ? src : $"{BaseUrl}{src.TrimStart('/')}";
+        }
+        private async Task LoadPlayerRankAsync()
+        {
+            var url = $"https://silkroad.gamegami.com/ranking_player.php?id={SelectedServer.ServerID}";
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
+
+            var html = await client.GetStringAsync(url);
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var rows = doc.DocumentNode.SelectNodes("//table[@class='table_rank']//tr[position()>1]");
+
+            PlayerRaankList.Clear();
+
+            foreach (var row in rows)
+            {
+                var cells = row.SelectNodes("td");
+                if (cells == null || cells.Count < 6)
+                    continue;
+
+                var medalImg = cells[0].SelectSingleNode(".//img");
+                var medalIcon = GetFullImageUrl(medalImg?.GetAttributeValue("src", ""));
+
+                var raceIcon = GetFullImageUrl(cells[2].SelectSingleNode(".//img")?.GetAttributeValue("src", ""));
+
+                var characterName = HtmlEntity.DeEntitize(cells[3].InnerText.Trim());
+                var points = int.TryParse(cells[4].InnerText.Trim(), out int p) ? p : 0;
+
+                var changeImg = cells[5].SelectSingleNode(".//img");
+                var changeIcon = GetFullImageUrl(changeImg?.GetAttributeValue("src", ""));
+                var changeDesc = changeImg?.GetAttributeValue("title", "Değişiklik yok");
+
+                PlayerRaankList.Add(new PlayerRank
+                {
+                    Rank = int.Parse(cells[1].InnerText.Trim()),
+                    CharacterName = characterName,
+                    Points = points,
+                    MedalIcon = medalIcon,
+                    RaceIcon = raceIcon,
+                    ChangeIcon = changeIcon,
+                    ChangeDescription = changeDesc
+                });
+            }
+
+        }
+
     }
 }
+
