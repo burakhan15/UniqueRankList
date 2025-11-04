@@ -98,6 +98,20 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="20" />
             </Grid.RowDefinitions>
+
+            <Border
+                Grid.RowSpan="5"
+                Padding="8"
+                CornerRadius="6">
+                <Border.Background>
+                    <ImageBrush
+                        AlignmentX="Center"
+                        AlignmentY="Center"
+                        ImageSource="/Assets/Icons/joymax_logo.png"
+                        Stretch="UniformToFill" />
+                </Border.Background>
+            </Border>
+
             <Grid
                 x:Name="BusyOverlay"
                 Grid.Row="0"
@@ -153,7 +167,7 @@
                         FontSize="20"
                         FontWeight="Bold"
                         Foreground="Yellow"
-                        Text="ANLIK UNIQUE VERİLERİ" />
+                        Text="Silkroad Nexus" />
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button
                             Width="30"
@@ -331,10 +345,10 @@
                         </ComboBox.ItemContainerStyle>
                     </ComboBox>
                     <Image
-                        Height="50"
-                        Margin="350,0,0,0"
+                        Height="65"
+                        Margin="300,0,0,0"
                         HorizontalAlignment="Right"
-                        Source="/Assets/Icons/logo.png" />
+                        Source="/Assets/Icons/logo_gsro.png" />
                 </StackPanel>
             </StackPanel>
             <StackPanel
@@ -665,7 +679,8 @@
                     BorderBrush="Transparent"
                     Command="{Binding RefreshCommand}"
                     Cursor="Hand"
-                    ToolTip="Tüm Verileri Yenile">
+                    ToolTip="Tüm Verileri Yenile"
+                    Visibility="Collapsed">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Background" Value="Transparent" />
@@ -801,6 +816,265 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+            <Grid Grid.Row="4" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    BorderBrush="#2C3E72"
+                    BorderThickness="1">
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="Tiger Girl : "
+                            TextDecorations="Underline">
+                            <TextBlock.ToolTip>
+                                <ToolTip Placement="Mouse">
+                                    <Image Width="300" Source="/Assets/Icons/tigergirl.png" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="Yellow"
+                            Text="{Binding TigerGirl}" />
+                        <TextBlock
+                            Margin="0,0,5,0"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="White"
+                            Text="önce kesildi." />
+                    </StackPanel>
+
+                </Border>
+
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    BorderBrush="#2C3E72"
+                    BorderThickness="1">
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="Cerberus : "
+                            TextDecorations="Underline">
+                            <TextBlock.ToolTip>
+                                <ToolTip Placement="Mouse">
+                                    <Image Width="300" Source="/Assets/Icons/cerberus.png" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="Yellow"
+                            Text="{Binding Cerberus}" />
+                        <TextBlock
+                            Margin="0,0,5,0"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="White"
+                            Text="önce kesildi." />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    BorderBrush="#2C3E72"
+                    BorderThickness="1">
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="Captain Ivy : "
+                            TextDecorations="Underline">
+                            <TextBlock.ToolTip>
+                                <ToolTip Placement="Mouse">
+                                    <Image Width="300" Source="/Assets/Icons/captainivy.png" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="Yellow"
+                            Text="{Binding CaptainIvy}" />
+                        <TextBlock
+                            Margin="0,0,5,0"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="White"
+                            Text="önce kesildi." />
+                    </StackPanel>
+                </Border>
+
+
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    BorderBrush="#2C3E72"
+                    BorderThickness="1">
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="Uruchi : "
+                            TextDecorations="Underline">
+                            <TextBlock.ToolTip>
+                                <ToolTip Placement="Mouse">
+                                    <Image Width="300" Source="/Assets/Icons/uruchi.png" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="Yellow"
+                            Text="{Binding Uruchi}" />
+                        <TextBlock
+                            Margin="0,0,5,0"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="White"
+                            Text="önce kesildi." />
+                    </StackPanel>
+                </Border>
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    BorderBrush="#2C3E72"
+                    BorderThickness="1">
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="Isyutaru : "
+                            TextDecorations="Underline">
+                            <TextBlock.ToolTip>
+                                <ToolTip Placement="Mouse">
+                                    <Image Width="300" Source="/Assets/Icons/isyutaru.png" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="Yellow"
+                            Text="{Binding Isyutaru}" />
+                        <TextBlock
+                            Margin="0,0,5,0"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="White"
+                            Text="önce kesildi." />
+                    </StackPanel>
+                </Border>
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    BorderBrush="#2C3E72"
+                    BorderThickness="1">
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="Lord Yarkan : "
+                            TextDecorations="Underline">
+                            <TextBlock.ToolTip>
+                                <ToolTip Placement="Mouse">
+                                    <Image Width="300" Source="/Assets/Icons/lordyarkan.png" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="Yellow"
+                            Text="{Binding LordYarkan}" />
+                        <TextBlock
+                            Margin="0,0,5,0"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="White"
+                            Text="önce kesildi." />
+                    </StackPanel>
+                </Border>
+                <Border
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    BorderBrush="#2C3E72"
+                    BorderThickness="1">
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="Demon Shaitan : "
+                            TextDecorations="Underline">
+                            <TextBlock.ToolTip>
+                                <ToolTip Placement="Mouse">
+                                    <Image Width="300" Source="/Assets/Icons/demonshaitan.png" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBlock
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="Yellow"
+                            Text="{Binding DemonShaitan}" />
+                        <TextBlock
+                            Margin="0,0,5,0"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="White"
+                            Text="önce kesildi." />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+
 
             <TabControl
                 Grid.Row="5"
@@ -1191,266 +1465,6 @@
                     </DataGrid>
                 </TabItem>
             </TabControl>
-
-
-            <Grid Grid.Row="4" Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <Border
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    BorderBrush="#2C3E72"
-                    BorderThickness="1">
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="Tiger Girl : "
-                            TextDecorations="Underline">
-                            <TextBlock.ToolTip>
-                                <ToolTip Placement="Mouse">
-                                    <Image Width="300" Source="/Assets/Icons/tigergirl.png" />
-                                </ToolTip>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            Foreground="Yellow"
-                            Text="{Binding TigerGirl}" />
-                        <TextBlock
-                            Margin="0,0,5,0"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            Foreground="White"
-                            Text="önce kesildi." />
-                    </StackPanel>
-
-                </Border>
-
-                <Border
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    BorderBrush="#2C3E72"
-                    BorderThickness="1">
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="Cerberus : "
-                            TextDecorations="Underline">
-                            <TextBlock.ToolTip>
-                                <ToolTip Placement="Mouse">
-                                    <Image Width="300" Source="/Assets/Icons/cerberus.png" />
-                                </ToolTip>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            Foreground="Yellow"
-                            Text="{Binding Cerberus}" />
-                        <TextBlock
-                            Margin="0,0,5,0"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            Foreground="White"
-                            Text="önce kesildi." />
-                    </StackPanel>
-                </Border>
-
-                <Border
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    BorderBrush="#2C3E72"
-                    BorderThickness="1">
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="Captain Ivy : "
-                            TextDecorations="Underline">
-                            <TextBlock.ToolTip>
-                                <ToolTip Placement="Mouse">
-                                    <Image Width="300" Source="/Assets/Icons/captainivy.png" />
-                                </ToolTip>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            Foreground="Yellow"
-                            Text="{Binding CaptainIvy}" />
-                        <TextBlock
-                            Margin="0,0,5,0"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            Foreground="White"
-                            Text="önce kesildi." />
-                    </StackPanel>
-                </Border>
-
-
-                <Border
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    BorderBrush="#2C3E72"
-                    BorderThickness="1">
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="Uruchi : "
-                            TextDecorations="Underline">
-                            <TextBlock.ToolTip>
-                                <ToolTip Placement="Mouse">
-                                    <Image Width="300" Source="/Assets/Icons/uruchi.png" />
-                                </ToolTip>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            Foreground="Yellow"
-                            Text="{Binding Uruchi}" />
-                        <TextBlock
-                            Margin="0,0,5,0"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            Foreground="White"
-                            Text="önce kesildi." />
-                    </StackPanel>
-                </Border>
-                <Border
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    BorderBrush="#2C3E72"
-                    BorderThickness="1">
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="Isyutaru : "
-                            TextDecorations="Underline">
-                            <TextBlock.ToolTip>
-                                <ToolTip Placement="Mouse">
-                                    <Image Width="300" Source="/Assets/Icons/isyutaru.png" />
-                                </ToolTip>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            Foreground="Yellow"
-                            Text="{Binding Isyutaru}" />
-                        <TextBlock
-                            Margin="0,0,5,0"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            Foreground="White"
-                            Text="önce kesildi." />
-                    </StackPanel>
-                </Border>
-                <Border
-                    Grid.Row="1"
-                    Grid.Column="2"
-                    BorderBrush="#2C3E72"
-                    BorderThickness="1">
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="Lord Yarkan : "
-                            TextDecorations="Underline">
-                            <TextBlock.ToolTip>
-                                <ToolTip Placement="Mouse">
-                                    <Image Width="300" Source="/Assets/Icons/lordyarkan.png" />
-                                </ToolTip>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            Foreground="Yellow"
-                            Text="{Binding LordYarkan}" />
-                        <TextBlock
-                            Margin="0,0,5,0"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            Foreground="White"
-                            Text="önce kesildi." />
-                    </StackPanel>
-                </Border>
-                <Border
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    BorderBrush="#2C3E72"
-                    BorderThickness="1">
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="Demon Shaitan : "
-                            TextDecorations="Underline">
-                            <TextBlock.ToolTip>
-                                <ToolTip Placement="Mouse">
-                                    <Image Width="300" Source="/Assets/Icons/demonshaitan.png" />
-                                </ToolTip>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBlock
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            Foreground="Yellow"
-                            Text="{Binding DemonShaitan}" />
-                        <TextBlock
-                            Margin="0,0,5,0"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            Foreground="White"
-                            Text="önce kesildi." />
-                    </StackPanel>
-                </Border>
-            </Grid>
-
             <StackPanel Grid.Row="6" Orientation="Horizontal">
                 <TextBlock
                     HorizontalAlignment="Left"

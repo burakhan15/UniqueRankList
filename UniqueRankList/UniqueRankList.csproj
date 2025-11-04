@@ -15,14 +15,16 @@
     <!-- Publish ayarları -->
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
-    <PublishSingleFile>true</PublishSingleFile>
+	<PublishSingleFile>false</PublishSingleFile>
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <TrimUnusedDependencies>false</TrimUnusedDependencies>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <PublishReadyToRun>true</PublishReadyToRun>
     <Configuration>Release</Configuration>
 	<ApplicationIcon>Assets\Logos\Logo.ico</ApplicationIcon>
+	<PublishTrimmed>false</PublishTrimmed>
   </PropertyGroup>
+
 
   <PropertyGroup>
     <!-- Eazfuscator.NET is integrated with this project at MSBuild level: https://help.gapotchenko.com/eazfuscator.net/kb/100036 -->
@@ -44,7 +46,9 @@
     <None Remove="Assets\Icons\eye.png" />
     <None Remove="Assets\Icons\info.png" />
     <None Remove="Assets\Icons\isyutaru.png" />
+    <None Remove="Assets\Icons\joymax_logo.png" />
     <None Remove="Assets\Icons\logo.png" />
+    <None Remove="Assets\Icons\logo_gsro.png" />
     <None Remove="Assets\Icons\lordyarkan.png" />
     <None Remove="Assets\Icons\seal.png" />
     <None Remove="Assets\Icons\server_check.png" />
@@ -83,6 +87,10 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icons\chardetails_labelbg.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\joymax_logo.png" />
+    <Resource Include="Assets\Icons\logo_gsro.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icons\seal.png">

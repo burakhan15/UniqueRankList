@@ -383,10 +383,8 @@ namespace UniqueRankList.ViewModel
             PlayerRaankList = new ObservableCollection<PlayerRank>();
             ServerList = new ObservableCollection<ServerModels>()
             {
-                new ServerModels{Server ="Troya", ServerID=2},
+                new ServerModels{Server ="Karya", ServerID=2},
                 new ServerModels{Server ="Knidos", ServerID=16},
-                new ServerModels{Server ="Milet", ServerID=17},
-                new ServerModels{Server ="Harput", ServerID=18},
                 new ServerModels{Server ="Nemrut", ServerID=19},
             };
 
@@ -538,6 +536,10 @@ namespace UniqueRankList.ViewModel
                     await LoadHonorRankAsync();
                     await LoadPlayerRankAsync();
                 });
+            }
+            catch(Exception ex)
+            {
+                throw ex;
             }
             finally
             {
