@@ -383,7 +383,7 @@ namespace UniqueRankList.ViewModel
             PlayerRaankList = new ObservableCollection<PlayerRank>();
             ServerList = new ObservableCollection<ServerModels>()
             {
-                new ServerModels{Server ="Karya", ServerID=2},
+                new ServerModels{Server ="Karya", ServerID=20},
                 new ServerModels{Server ="Knidos", ServerID=16},
                 new ServerModels{Server ="Nemrut", ServerID=19},
             };
