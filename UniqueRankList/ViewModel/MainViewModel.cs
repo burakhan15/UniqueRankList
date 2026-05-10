@@ -386,6 +386,7 @@ namespace UniqueRankList.ViewModel
                 new ServerModels{Server ="Karya", ServerID=20},
                 new ServerModels{Server ="Knidos", ServerID=16},
                 new ServerModels{Server ="Nemrut", ServerID=19},
+                new ServerModels{Server ="Lidya", ServerID=21},
             };
 
             SelectedServer = ServerList.First();
